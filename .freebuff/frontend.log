@@ -1,0 +1,671 @@
+Starting the development server...
+
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3001
+  On Your Network:  http://10.107.46.134:3001
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+Failed to compile.
+
+Module not found: Error: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'
+[1m[31mERROR[39m[22m in [1m./src/pages/Editor.js[39m[22m [1m[32m11:0-83[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Gallery.js[39m[22m [1m[32m8:0-64[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Home.js[39m[22m [1m[32m10:0-44[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/View.js[39m[22m [1m[32m8:0-43[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+webpack compiled with [1m[31m4 errors[39m[22m
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve './pages/Gallery' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src'
+[1m[31mERROR[39m[22m in [1m./src/App.js[39m[22m [1m[32m9:0-38[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve './pages/Gallery' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/App.js[39m[22m [1m[32m10:0-32[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve './pages/View' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Editor.js[39m[22m [1m[32m11:0-83[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Home.js[39m[22m [1m[32m10:0-44[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+webpack compiled with [1m[31m4 errors[39m[22m
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'
+[1m[31mERROR[39m[22m in [1m./src/pages/Editor.js[39m[22m [1m[32m11:0-83[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Home.js[39m[22m [1m[32m10:0-44[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+webpack compiled with [1m[31m2 errors[39m[22m
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Editor.js[39m[22m [1m[32m11:0-83[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Home.js[39m[22m [1m[32m10:0-44[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+webpack compiled with [1m[31m2 errors[39m[22m and [1m[33m1 warning[39m[22m
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Editor.js[39m[22m [1m[32m11:0-83[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+webpack compiled with [1m[31m1 error[39m[22m and [1m[33m1 warning[39m[22m
+Compiling...
+Failed to compile.
+
+Module not found: Error: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+[1m[31mERROR[39m[22m in [1m./src/pages/Editor.js[39m[22m [1m[32m11:0-83[39m[22m
+[1mModule [1m[31mnot found[39m[22m[1m: [1m[31mError[39m[22m[1m: Can't resolve '../api' in 'D:\projects 2.0\main\S-ppt-maker\frontend\src\pages'[39m[22m
+
+webpack compiled with [1m[31m1 error[39m[22m and [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 71:22:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 85:23:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 216:15:  'saveAs' is assigned a value but never used                                            no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 71:22:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 85:23:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 216:15:  'saveAs' is assigned a value but never used                                            no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\data\templates.js
+  Line 38:7:  'sectionDivider' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 4:53:   'FiSave' is defined but never used                                                                                no-unused-vars
+  Line 6:49:   'FiVideo' is defined but never used                                                                               no-unused-vars
+  Line 6:58:   'FiGrid' is defined but never used                                                                                no-unused-vars
+  Line 328:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 136:15:  'saveAs' is assigned a value but never used  no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\ExportModal.js
+  Line 71:22:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 85:23:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 216:15:  'saveAs' is assigned a value but never used                                            no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+[1m[33mWARNING[39m[22m in [1m[eslint] 
+src\components\ExportModal.js
+  Line 71:22:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 85:23:   Function declared in a loop contains unsafe references to variable(s) 'pendingImages'  no-loop-func
+  Line 216:15:  'saveAs' is assigned a value but never used                                            no-unused-vars
+
+src\pages\Editor.js
+  Line 383:6:  React Hook useEffect has a missing dependency: 'deleteElement'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src\pages\Gallery.js
+  Line 3:10:  'FiArrowLeft' is defined but never used  no-unused-vars
+
+src\pages\Home.js
+  Line 1:27:   'useRef' is defined but never used                 no-unused-vars
+  Line 66:10:  'showModal' is assigned a value but never used     no-unused-vars
+  Line 66:21:  'setShowModal' is assigned a value but never used  no-unused-vars
+
+src\pages\View.js
+  Line 3:46:  'FiGrid' is defined but never used  no-unused-vars
+
+[39m[22m
+
+webpack compiled with [1m[33m1 warning[39m[22m
