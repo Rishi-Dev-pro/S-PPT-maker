@@ -5,8 +5,4 @@ backend/node_modules/
 .env
 .env.local
 .env.*.local
-.freebuff/preview-*.log
-.freebuff/backend.log
-.freebuff/backend.log.err
-.freebuff/start-servers.ps1
-.freebuff/start-backend.bat
+.freebuff/
