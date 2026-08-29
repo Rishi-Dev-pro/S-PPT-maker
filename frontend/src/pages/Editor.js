@@ -4,7 +4,7 @@ import {
   FiPlus, FiTrash2, FiCopy, FiArrowUp, FiArrowDown, FiDownload,
   FiType, FiSquare, FiCircle, FiImage, FiAlignLeft, FiAlignCenter, FiAlignRight,
   FiBold, FiItalic, FiUnderline, FiArrowLeft, FiChevronDown, FiVideo,
-  FiMaximize, FiLayers, FiMove, FiCheck
+  FiMaximize, FiLayers, FiMove, FiCheck, FiLock, FiUnlock
 } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
 import { createSlidesFromTemplate, getTemplateById } from '../data/templates';
@@ -94,15 +94,12 @@ function createSlideByLayout(layoutType, currentBgColor = '#ffffff') {
         elements: [
           { id: uuidv4(), type: 'text', x: 50, y: 35, width: 860, height: 50, content: { text: 'Key Performance Indicators', fontSize: 30, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'shape', x: 50, y: 90, width: 60, height: 3, content: { shapeType: 'rect', color: accentColor, borderRadius: 2 }, style: {} },
-          // Card 1
           { id: uuidv4(), type: 'shape', x: 50, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 75, y: 165, width: 215, height: 75, content: { text: '99.9%', fontSize: 44, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 75, y: 245, width: 215, height: 120, content: { text: 'Uptime SLA delivered across all distributed cloud regions.', fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.5 }, style: { textAlign: 'left' } },
-          // Card 2
           { id: uuidv4(), type: 'shape', x: 345, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 370, y: 165, width: 215, height: 75, content: { text: '4.8x', fontSize: 44, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 370, y: 245, width: 215, height: 120, content: { text: 'Increase in developer deployment throughput per sprint.', fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.5 }, style: { textAlign: 'left' } },
-          // Card 3
           { id: uuidv4(), type: 'shape', x: 640, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 665, y: 165, width: 215, height: 75, content: { text: '<50ms', fontSize: 44, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 665, y: 245, width: 215, height: 120, content: { text: 'Global edge response latency achieved at 95th percentile.', fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.5 }, style: { textAlign: 'left' } },
@@ -129,17 +126,14 @@ function createSlideByLayout(layoutType, currentBgColor = '#ffffff') {
         elements: [
           { id: uuidv4(), type: 'text', x: 50, y: 35, width: 860, height: 50, content: { text: 'Step-by-Step Implementation', fontSize: 30, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'shape', x: 50, y: 90, width: 60, height: 3, content: { shapeType: 'rect', color: accentColor, borderRadius: 2 }, style: {} },
-          // Step 1
           { id: uuidv4(), type: 'shape', x: 50, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 75, y: 165, width: 210, height: 50, content: { text: '01', fontSize: 36, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 75, y: 225, width: 210, height: 40, content: { text: 'Discovery & Plan', fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 75, y: 275, width: 210, height: 160, content: { text: 'Identify constraints, stakeholder requirements, and technical boundaries.', fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.6 }, style: { textAlign: 'left' } },
-          // Step 2
           { id: uuidv4(), type: 'shape', x: 350, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 375, y: 165, width: 210, height: 50, content: { text: '02', fontSize: 36, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 375, y: 225, width: 210, height: 40, content: { text: 'Build & Iterate', fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 375, y: 275, width: 210, height: 160, content: { text: 'Rapid prototyping and validation in targeted test environments.', fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.6 }, style: { textAlign: 'left' } },
-          // Step 3
           { id: uuidv4(), type: 'shape', x: 650, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 675, y: 165, width: 210, height: 50, content: { text: '03', fontSize: 36, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 675, y: 225, width: 210, height: 40, content: { text: 'Launch & Scale', fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
@@ -183,17 +177,16 @@ function createBlankElement(type) {
   return null;
 }
 
-// Convert plain text with newlines to HTML for contentEditable
 function textToHtml(text) {
   if (!text) return '';
-  if (text.includes('<') && text.includes('>')) return text; // Already HTML
+  if (text.includes('<') && text.includes('>')) return text;
   return text
     .split('\n')
     .map(line => line === '' ? '<br>' : `<div>${line}</div>`)
     .join('');
 }
 
-// ── Slide Thumbnail (100% Proportional Miniature Scale) ──
+// ── Slide Thumbnail (Proportional Miniature Replica) ──
 function SlideThumbnail({ slide, index, isActive, onClick, onDelete, onDuplicate, onMoveUp, onMoveDown, total }) {
   const getBg = () => {
     if (typeof slide.background === 'string') return { background: slide.background };
@@ -204,7 +197,6 @@ function SlideThumbnail({ slide, index, isActive, onClick, onDelete, onDuplicate
   return (
     <div className={`slide-thumb ${isActive ? 'active' : ''}`} onClick={onClick}>
       <div className="slide-thumb-preview" style={getBg()}>
-        {/* Exact miniature proportional clone (182px x 102px = 0.19 scale of 960x540) */}
         <div style={{
           width: 960,
           height: 540,
@@ -303,11 +295,12 @@ function SlideThumbnail({ slide, index, isActive, onClick, onDelete, onDuplicate
   );
 }
 
-// ── In-Place Editable Element with Selection-Level Rich Text ──
+// ── In-Place Editable Element with Smart Alignment, Shift Aspect Ratio & Live Metric Badge ──
 function EditableElement({
   element,
   isSelected,
   onSelect,
+  onContextMenu,
   onDrag,
   onDragStart,
   onDragEnd,
@@ -318,11 +311,11 @@ function EditableElement({
   scale
 }) {
   const [editing, setEditing] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
   const textRef = useRef(null);
   const dragRef = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0, hasMoved: false });
   const resizeRef = useRef({ resizing: false, startX: 0, startY: 0, origW: 0, origH: 0, origX: 0, origY: 0, handle: '', hasResized: false });
 
-  // Sync contentEditable innerHTML when editing state initiates
   useEffect(() => {
     if (editing && textRef.current) {
       textRef.current.innerHTML = textToHtml(element.content.text || '');
@@ -333,15 +326,13 @@ function EditableElement({
         const sel = window.getSelection();
         sel.removeAllRanges();
         sel.addRange(range);
-      } catch (err) {
-        // Fallback focus
-      }
+      } catch (err) {}
     }
   }, [editing, element.content.text]);
 
   const handleDoubleClick = (e) => {
     e.stopPropagation();
-    if (element.type === 'text') {
+    if (element.type === 'text' && !element.isLocked) {
       setEditing(true);
     }
   };
@@ -362,7 +353,6 @@ function EditableElement({
       const newHtml = textRef.current ? textRef.current.innerHTML : '';
       onTextUpdate(element.id, newHtml);
     }
-    // Allow Ctrl+B, Ctrl+I, Ctrl+U natively in contentEditable
     if (e.ctrlKey || e.metaKey) {
       if (e.key === 'b' || e.key === 'B') {
         document.execCommand('bold', false, null);
@@ -378,7 +368,7 @@ function EditableElement({
   };
 
   const handleMouseDown = (e) => {
-    if (editing) return;
+    if (editing || element.isLocked) return;
     e.stopPropagation();
     onSelect();
 
@@ -391,6 +381,7 @@ function EditableElement({
       hasMoved: false
     };
 
+    setIsInteracting(true);
     onDragStart();
 
     const handleMouseMove = (ev) => {
@@ -402,13 +393,25 @@ function EditableElement({
         dragRef.current.hasMoved = true;
       }
 
-      const nextX = Math.max(0, Math.round(dragRef.current.origX + dx));
-      const nextY = Math.max(0, Math.round(dragRef.current.origY + dy));
-      onDrag(element.id, nextX, nextY);
+      let nextX = Math.round(dragRef.current.origX + dx);
+      let nextY = Math.round(dragRef.current.origY + dy);
+
+      // Smart Snapping (Center Horizontal at 480, Center Vertical at 270, Margins at 40/50)
+      const elementMidX = nextX + element.width / 2;
+      const elementMidY = nextY + element.height / 2;
+
+      if (Math.abs(elementMidX - 480) < 6) nextX = Math.round(480 - element.width / 2);
+      if (Math.abs(elementMidY - 270) < 6) nextY = Math.round(270 - element.height / 2);
+      if (Math.abs(nextX - 40) < 6) nextX = 40;
+      if (Math.abs(nextX - (920 - element.width)) < 6) nextX = 920 - element.width;
+      if (Math.abs(nextY - 40) < 6) nextY = 40;
+
+      onDrag(element.id, Math.max(0, nextX), Math.max(0, nextY));
     };
 
     const handleMouseUp = () => {
       dragRef.current.dragging = false;
+      setIsInteracting(false);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       if (dragRef.current.hasMoved) {
@@ -421,6 +424,7 @@ function EditableElement({
   };
 
   const handleResizeStart = (e, handle) => {
+    if (element.isLocked) return;
     e.stopPropagation();
     e.preventDefault();
     resizeRef.current = {
@@ -431,10 +435,12 @@ function EditableElement({
       origH: element.height,
       origX: element.x,
       origY: element.y,
+      aspectRatio: element.width / Math.max(1, element.height),
       handle,
       hasResized: false
     };
 
+    setIsInteracting(true);
     onResizeStart();
 
     const handleMouseMove = (ev) => {
@@ -442,28 +448,33 @@ function EditableElement({
       const dx = (ev.clientX - resizeRef.current.startX) / scale;
       const dy = (ev.clientY - resizeRef.current.startY) / scale;
 
-      const { origX, origY, origW, origH, handle: h } = resizeRef.current;
+      const { origX, origY, origW, origH, aspectRatio, handle: h } = resizeRef.current;
       const minW = 30;
       const minH = 20;
+      const preserveAspect = ev.shiftKey || element.type === 'circle';
 
       let newW = origW;
       let newH = origH;
       let newX = origX;
       let newY = origY;
 
-      if (h.includes('e')) {
-        newW = Math.max(minW, origW + dx);
-      }
+      if (h.includes('e')) newW = Math.max(minW, origW + dx);
       if (h.includes('w')) {
         newW = Math.max(minW, origW - dx);
-        newX = origX + (origW - newW); // Stable boundary clamping — NO TELEPORTING!
+        newX = origX + (origW - newW);
       }
-      if (h.includes('s')) {
-        newH = Math.max(minH, origH + dy);
-      }
+      if (h.includes('s')) newH = Math.max(minH, origH + dy);
       if (h.includes('n')) {
         newH = Math.max(minH, origH - dy);
-        newY = origY + (origH - newH); // Stable boundary clamping — NO TELEPORTING!
+        newY = origY + (origH - newH);
+      }
+
+      // Proportional aspect ratio locking if shift is held or circle shape
+      if (preserveAspect && (h === 'nw' || h === 'ne' || h === 'se' || h === 'sw')) {
+        if (newW / aspectRatio > newH) newW = Math.round(newH * aspectRatio);
+        else newH = Math.round(newW / aspectRatio);
+        if (h.includes('w')) newX = origX + (origW - newW);
+        if (h.includes('n')) newY = origY + (origH - newH);
       }
 
       resizeRef.current.hasResized = true;
@@ -472,6 +483,7 @@ function EditableElement({
 
     const handleMouseUp = () => {
       resizeRef.current.resizing = false;
+      setIsInteracting(false);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       if (resizeRef.current.hasResized) {
@@ -483,7 +495,7 @@ function EditableElement({
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const ResizeHandles = () => isSelected && !editing ? (
+  const ResizeHandles = () => isSelected && !editing && !element.isLocked ? (
     <>
       <div className="resize-handle ne" onMouseDown={e => handleResizeStart(e, 'ne')} />
       <div className="resize-handle nw" onMouseDown={e => handleResizeStart(e, 'nw')} />
@@ -502,7 +514,7 @@ function EditableElement({
     top: element.y * scale,
     width: element.width * scale,
     height: element.height * scale,
-    cursor: editing ? 'text' : 'move',
+    cursor: element.isLocked ? 'default' : (editing ? 'text' : 'move'),
     opacity: element.style?.opacity ?? 1,
     zIndex: isSelected ? 40 : 1,
   };
@@ -531,7 +543,22 @@ function EditableElement({
     const isHtml = element.content.text && element.content.text.includes('<') && element.content.text.includes('>');
 
     return (
-      <div style={style} onMouseDown={handleMouseDown} onDoubleClick={handleDoubleClick}>
+      <div
+        style={style}
+        onMouseDown={handleMouseDown}
+        onDoubleClick={handleDoubleClick}
+        onContextMenu={(e) => onContextMenu(e, element.id)}
+      >
+        {isInteracting && (
+          <div className="dimension-badge">
+            {Math.round(element.width)} × {Math.round(element.height)} px
+          </div>
+        )}
+        {element.isLocked && isSelected && (
+          <div className="element-lock-badge" title="Element is locked">
+            <FiLock size={10} />
+          </div>
+        )}
         {editing ? (
           <div
             ref={textRef}
@@ -563,7 +590,18 @@ function EditableElement({
           boxShadow: isSelected ? '0 0 0 1px rgba(124, 58, 237, 0.5)' : 'none',
         }}
         onMouseDown={handleMouseDown}
+        onContextMenu={(e) => onContextMenu(e, element.id)}
       >
+        {isInteracting && (
+          <div className="dimension-badge">
+            {Math.round(element.width)} × {Math.round(element.height)} px
+          </div>
+        )}
+        {element.isLocked && isSelected && (
+          <div className="element-lock-badge" title="Element is locked">
+            <FiLock size={10} />
+          </div>
+        )}
         <ResizeHandles />
       </div>
     );
@@ -579,7 +617,18 @@ function EditableElement({
           overflow: 'hidden'
         }}
         onMouseDown={handleMouseDown}
+        onContextMenu={(e) => onContextMenu(e, element.id)}
       >
+        {isInteracting && (
+          <div className="dimension-badge">
+            {Math.round(element.width)} × {Math.round(element.height)} px
+          </div>
+        )}
+        {element.isLocked && isSelected && (
+          <div className="element-lock-badge" title="Element is locked">
+            <FiLock size={10} />
+          </div>
+        )}
         <img src={element.content.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }} crossOrigin="anonymous" />
         <ResizeHandles />
       </div>
@@ -598,6 +647,7 @@ function EditableElement({
           background: '#000'
         }}
         onMouseDown={handleMouseDown}
+        onContextMenu={(e) => onContextMenu(e, element.id)}
       >
         {videoId ? (
           <iframe
@@ -710,6 +760,57 @@ function ColorPickerPopover({ value, onChange, label, onClose }) {
   );
 }
 
+// ── Right-Click PowerPoint-Style Context Menu ──
+function ContextMenu({ x, y, element, onAction, onClose }) {
+  useEffect(() => {
+    const handleOutside = () => onClose();
+    window.addEventListener('click', handleOutside);
+    return () => window.removeEventListener('click', handleOutside);
+  }, [onClose]);
+
+  return (
+    <div
+      className="context-menu"
+      style={{ left: x, top: y }}
+      onClick={e => e.stopPropagation()}
+    >
+      <button className="ctx-item" onClick={() => onAction('copy')}>
+        <span>Copy</span> <span className="ctx-shortcut">Ctrl+C</span>
+      </button>
+      <button className="ctx-item" onClick={() => onAction('duplicate')}>
+        <span>Duplicate</span> <span className="ctx-shortcut">Ctrl+D</span>
+      </button>
+      <button className="ctx-item danger" onClick={() => onAction('delete')}>
+        <span>Delete</span> <span className="ctx-shortcut">Del</span>
+      </button>
+      <div className="ctx-divider" />
+      <button className="ctx-item" onClick={() => onAction('bring-forward')}>
+        <span>Bring Forward</span> <span className="ctx-shortcut">Ctrl+]</span>
+      </button>
+      <button className="ctx-item" onClick={() => onAction('bring-to-front')}>
+        <span>Bring to Front</span> <span className="ctx-shortcut">Ctrl+Shift+]</span>
+      </button>
+      <button className="ctx-item" onClick={() => onAction('send-backward')}>
+        <span>Send Backward</span> <span className="ctx-shortcut">Ctrl+[</span>
+      </button>
+      <button className="ctx-item" onClick={() => onAction('send-to-back')}>
+        <span>Send to Back</span> <span className="ctx-shortcut">Ctrl+Shift+[</span>
+      </button>
+      <div className="ctx-divider" />
+      <button className="ctx-item" onClick={() => onAction('align-center-h')}>
+        <span>Center Horizontally</span>
+      </button>
+      <button className="ctx-item" onClick={() => onAction('align-center-v')}>
+        <span>Center Vertically</span>
+      </button>
+      <div className="ctx-divider" />
+      <button className="ctx-item" onClick={() => onAction('toggle-lock')}>
+        <span>{element?.isLocked ? 'Unlock Element' : 'Lock Element'}</span>
+      </button>
+    </div>
+  );
+}
+
 // ── MAIN EDITOR COMPONENT ──
 export default function Editor() {
   const navigate = useNavigate();
@@ -723,14 +824,15 @@ export default function Editor() {
   const [presentationTitle, setPresentationTitle] = useState('Untitled Presentation');
   const [showExport, setShowExport] = useState(false);
   const [canvasScale, setCanvasScale] = useState(0.7);
-  const [zoomMode, setZoomMode] = useState('fit');
+  const [zoomLevel, setZoomLevel] = useState('fit'); // 'fit' | '50' | '75' | '100' | '125' | '150'
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const [clipboard, setClipboard] = useState(null);
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [activeColorPicker, setActiveColorPicker] = useState(null); // 'text' | 'shape-fill' | 'shape-border' | 'bg' | null
+  const [activeColorPicker, setActiveColorPicker] = useState(null);
+  const [contextMenu, setContextMenu] = useState(null); // { visible: true, x, y, targetId }
 
   const snapshotRef = useRef(null);
 
@@ -761,7 +863,6 @@ export default function Editor() {
     }
   }, [redoStack, slides, currentSlide]);
 
-  // Load template or blank slide on initial mount
   useEffect(() => {
     if (location.state?.templateId) {
       const tid = location.state.templateId;
@@ -781,7 +882,6 @@ export default function Editor() {
       const isInputActive = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) ||
         document.activeElement?.isContentEditable;
 
-      // Global Undo/Redo
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
         if (!e.shiftKey) { e.preventDefault(); undo(); }
         else { e.preventDefault(); redo(); }
@@ -794,7 +894,6 @@ export default function Editor() {
         e.preventDefault(); setShowExport(true); return;
       }
 
-      // If active typing in input or contentEditable, let native typing handle
       if (isInputActive) return;
 
       // Copy & Paste Elements
@@ -831,7 +930,7 @@ export default function Editor() {
         duplicateSelectedElement();
       }
 
-      // Layer Shortcuts: Ctrl+] (Forward), Ctrl+[ (Backward)
+      // Layer Shortcuts
       if ((e.ctrlKey || e.metaKey) && e.key === ']') {
         e.preventDefault();
         if (e.shiftKey) bringToFront(selectedElement);
@@ -845,17 +944,21 @@ export default function Editor() {
 
       // Delete Element
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedElement) {
-        e.preventDefault();
-        deleteElement(selectedElement);
+        const curSlide = slides[currentSlide];
+        const el = curSlide?.elements?.find(item => item.id === selectedElement);
+        if (el && !el.isLocked) {
+          e.preventDefault();
+          deleteElement(selectedElement);
+        }
       }
 
-      // Nudge Element with Arrow Keys
+      // Arrow Key Nudging
       if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key) && selectedElement) {
         e.preventDefault();
         const step = e.shiftKey ? 10 : 1;
         const curSlide = slides[currentSlide];
         const el = curSlide?.elements?.find(item => item.id === selectedElement);
-        if (el) {
+        if (el && !el.isLocked) {
           let nx = el.x, ny = el.y;
           if (e.key === 'ArrowLeft') nx = Math.max(0, el.x - step);
           if (e.key === 'ArrowRight') nx = Math.min(940, el.x + step);
@@ -871,6 +974,7 @@ export default function Editor() {
         setShowAddMenu(false);
         setShowLayoutMenu(false);
         setActiveColorPicker(null);
+        setContextMenu(null);
       }
     };
 
@@ -879,27 +983,27 @@ export default function Editor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedElement, slides, currentSlide, undo, redo, clipboard]);
 
-  // Compute Canvas Scale
+  // Canvas Scale & Zoom computation
   useEffect(() => {
     const updateScale = () => {
       if (!canvasRef.current) return;
       const parent = canvasRef.current.parentElement;
       if (!parent) return;
 
-      if (zoomMode === 'fit') {
+      if (zoomLevel === 'fit') {
         const availW = parent.clientWidth - 80;
         const availH = parent.clientHeight - 80;
         const fitScale = Math.min(availW / 960, availH / 540, 1.2);
         setCanvasScale(Math.max(0.35, fitScale));
       } else {
-        setCanvasScale(parseFloat(zoomMode) / 100);
+        setCanvasScale(parseFloat(zoomLevel) / 100);
       }
     };
 
     updateScale();
     window.addEventListener('resize', updateScale);
     return () => window.removeEventListener('resize', updateScale);
-  }, [zoomMode]);
+  }, [zoomLevel]);
 
   const slide = slides[currentSlide] || slides[0] || createBlankSlide();
 
@@ -1041,6 +1145,13 @@ export default function Editor() {
     setSelectedElement(clone.id);
   };
 
+  const toggleLockElement = (elementId) => {
+    const el = slide?.elements?.find(item => item.id === elementId);
+    if (!el) return;
+    addUndo();
+    updateElement(elementId, { isLocked: !el.isLocked });
+  };
+
   const updateElement = (elementId, updates) => {
     const newSlides = [...slides];
     newSlides[currentSlide] = {
@@ -1179,7 +1290,6 @@ export default function Editor() {
     return { background: slide?.background?.color || '#ffffff' };
   };
 
-  // ── Text Format Handler (Executes on Selection or Whole Element) ──
   const handleFormatText = (command, val = null) => {
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
@@ -1201,10 +1311,48 @@ export default function Editor() {
     }
   };
 
+  // Context Menu Handler
+  const handleContextMenu = (e, elementId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedElement(elementId);
+    setContextMenu({ visible: true, x: e.clientX, y: e.clientY, targetId: elementId });
+  };
+
+  const handleContextAction = (action) => {
+    const targetId = contextMenu?.targetId || selectedElement;
+    if (!targetId) return;
+
+    if (action === 'copy') {
+      const el = slide?.elements?.find(item => item.id === targetId);
+      if (el) setClipboard(JSON.parse(JSON.stringify(el)));
+    } else if (action === 'duplicate') {
+      duplicateSelectedElement();
+    } else if (action === 'delete') {
+      deleteElement(targetId);
+    } else if (action === 'bring-forward') {
+      bringForward(targetId);
+    } else if (action === 'bring-to-front') {
+      bringToFront(targetId);
+    } else if (action === 'send-backward') {
+      sendBackward(targetId);
+    } else if (action === 'send-to-back') {
+      sendToBack(targetId);
+    } else if (action === 'align-center-h') {
+      alignElement('center-h');
+    } else if (action === 'align-center-v') {
+      alignElement('center-v');
+    } else if (action === 'toggle-lock') {
+      toggleLockElement(targetId);
+    }
+
+    setContextMenu(null);
+  };
+
   const selectedEl = slide?.elements?.find(e => e.id === selectedElement);
 
   return (
-    <div className="editor" onClick={() => setActiveColorPicker(null)}>
+    <div className="editor" onClick={() => { setActiveColorPicker(null); setContextMenu(null); }}>
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
 
       {/* Top Bar */}
@@ -1317,7 +1465,6 @@ export default function Editor() {
                     {FONTS.map(f => <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>)}
                   </select>
 
-                  {/* Font Size Stepper */}
                   <div className="font-size-stepper">
                     <button
                       className="stepper-btn"
@@ -1498,7 +1645,7 @@ export default function Editor() {
               </>
             )}
 
-            {/* Layer & Alignment Controls when any element is selected */}
+            {/* Layer, Alignment & Lock Controls when element is selected */}
             {selectedElement && (
               <>
                 <div className="tb-div" />
@@ -1518,6 +1665,13 @@ export default function Editor() {
                   <button className="tb-icon" onClick={duplicateSelectedElement} title="Duplicate Element (Ctrl+D)">
                     <FiCopy size={13} />
                   </button>
+                  <button
+                    className={`tb-icon ${selectedEl?.isLocked ? 'on' : ''}`}
+                    onClick={() => toggleLockElement(selectedElement)}
+                    title={selectedEl?.isLocked ? 'Unlock Element' : 'Lock Element Position'}
+                  >
+                    {selectedEl?.isLocked ? <FiLock size={13} /> : <FiUnlock size={13} />}
+                  </button>
                 </div>
               </>
             )}
@@ -1525,7 +1679,12 @@ export default function Editor() {
             <div className="tb-spacer" />
 
             {selectedElement && (
-              <button className="toolbar-btn danger" onClick={() => deleteElement(selectedElement)} title="Delete Element (Del)">
+              <button
+                className="toolbar-btn danger"
+                onClick={() => deleteElement(selectedElement)}
+                disabled={selectedEl?.isLocked}
+                title="Delete Element (Del)"
+              >
                 <FiTrash2 size={13} /> Delete
               </button>
             )}
@@ -1567,25 +1726,33 @@ export default function Editor() {
 
             {/* Zoom Controls */}
             <div className="zoom-controls">
-              <button className="zoom-btn" onClick={() => setZoomMode('fit')} title="Fit Canvas">
-                <FiMaximize size={12} /> Fit
+              <button
+                className="zoom-btn"
+                onClick={() => setZoomLevel(zoomLevel === 'fit' ? '100' : 'fit')}
+                title="Fit Canvas"
+              >
+                <FiMaximize size={12} /> {zoomLevel === 'fit' ? 'Fit' : '100%'}
               </button>
               <select
                 className="zoom-select"
-                value={zoomMode}
-                onChange={e => setZoomMode(e.target.value)}
+                value={zoomLevel}
+                onChange={e => setZoomLevel(e.target.value)}
               >
                 <option value="fit">Auto Fit</option>
                 <option value="50">50%</option>
                 <option value="75">75%</option>
                 <option value="100">100%</option>
                 <option value="125">125%</option>
+                <option value="150">150%</option>
               </select>
             </div>
           </div>
 
           {/* Canvas Area */}
-          <div className="canvas-area" onClick={() => setSelectedElement(null)}>
+          <div
+            className="canvas-area"
+            onClick={() => { setSelectedElement(null); setContextMenu(null); }}
+          >
             <div className="canvas-wrapper" ref={canvasRef}>
               <div
                 className="canvas"
@@ -1598,16 +1765,17 @@ export default function Editor() {
                   if (e.target === e.currentTarget) {
                     setSelectedElement(null);
                     setShowAddMenu(false);
+                    setContextMenu(null);
                   }
                 }}
               >
-                {/* Clean Layer Rendering in natural array index order */}
                 {slide?.elements?.map(element => (
                   <EditableElement
                     key={element.id}
                     element={element}
                     isSelected={selectedElement === element.id}
                     onSelect={() => setSelectedElement(element.id)}
+                    onContextMenu={handleContextMenu}
                     onDrag={onDrag}
                     onDragStart={onDragStart}
                     onDragEnd={onDragEnd}
@@ -1623,6 +1791,17 @@ export default function Editor() {
           </div>
         </div>
       </div>
+
+      {/* Right-Click Context Menu */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          element={selectedEl}
+          onAction={handleContextAction}
+          onClose={() => setContextMenu(null)}
+        />
+      )}
 
       {showExport && <ExportModal slides={slides} title={presentationTitle} onClose={() => setShowExport(false)} />}
       {showVideoModal && <VideoUrlModal onClose={() => setShowVideoModal(false)} onAdd={addVideo} />}
