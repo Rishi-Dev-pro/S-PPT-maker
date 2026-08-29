@@ -1,19 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { FiX, FiFileText, FiFile, FiDownload, FiCheck, FiSave } from 'react-icons/fi';
+import { FiX, FiDownload, FiCheck, FiSave } from 'react-icons/fi';
 import { autoSaveDraft } from '../utils/draftStorage';
 import './ExportModal.css';
-
-// ═══════════════════════════════════════════════════════════════
-// CONSTANTS
-// ═══════════════════════════════════════════════════════════════
 
 const SLIDE_W = 960;
 const SLIDE_H = 540;
 const EXPORT_SCALE = 2;
-
-// ═══════════════════════════════════════════════════════════════
-// COLOR UTILITIES
-// ═══════════════════════════════════════════════════════════════
 
 function parseColor(color) {
   if (!color) return { hex: '000000', alpha: 1 };
@@ -57,10 +49,6 @@ function resolveBackgroundCSS(bg) {
   if (bg.gradient) return bg.gradient;
   return '#ffffff';
 }
-
-// ═══════════════════════════════════════════════════════════════
-// IMAGE ASSET PIPELINE
-// ═══════════════════════════════════════════════════════════════
 
 const imageCache = new Map();
 
@@ -217,10 +205,6 @@ async function waitForFonts() {
   await new Promise(r => setTimeout(r, 150));
 }
 
-// ═══════════════════════════════════════════════════════════════
-// TWO-PHASE CANVAS RENDERER (for PDF/PNG)
-// ═══════════════════════════════════════════════════════════════
-
 async function renderSlideToCanvas(slide, canvas) {
   canvas.width = SLIDE_W * EXPORT_SCALE;
   canvas.height = SLIDE_H * EXPORT_SCALE;
@@ -235,7 +219,7 @@ async function renderSlideToCanvas(slide, canvas) {
     if (el.type === 'image' && el.content?.src) {
       const p = loadImage(el.content.src, 15000)
         .then(img => imageAssets.set(el.id, img))
-        .catch(err => { console.warn(`Export: image preload failed [${el.id}]: ${err.message}`); imageAssets.set(el.id, null); });
+        .catch(err => { console.warn(`Export: image preload failed: ${err.message}`); imageAssets.set(el.id, null); });
       imageLoadPromises.push(p);
     }
   }
@@ -304,29 +288,14 @@ function drawShape(ctx, el) {
     ctx.beginPath();
     ctx.ellipse(el.x + el.width / 2, el.y + el.height / 2, el.width / 2, el.height / 2, 0, 0, Math.PI * 2);
     ctx.fill();
-    if (el.content.borderWidth && el.content.borderColor) {
-      ctx.lineWidth = el.content.borderWidth;
-      ctx.strokeStyle = el.content.borderColor;
-      ctx.stroke();
-    }
   } else {
     const r = el.content.borderRadius || 0;
     if (r > 0) {
       ctx.beginPath();
       roundedRectPath(ctx, el.x, el.y, el.width, el.height, r);
       ctx.fill();
-      if (el.content.borderWidth && el.content.borderColor) {
-        ctx.lineWidth = el.content.borderWidth;
-        ctx.strokeStyle = el.content.borderColor;
-        ctx.stroke();
-      }
     } else {
       ctx.fillRect(el.x, el.y, el.width, el.height);
-      if (el.content.borderWidth && el.content.borderColor) {
-        ctx.lineWidth = el.content.borderWidth;
-        ctx.strokeStyle = el.content.borderColor;
-        ctx.strokeRect(el.x, el.y, el.width, el.height);
-      }
     }
   }
   ctx.restore();
@@ -343,14 +312,8 @@ function drawImage(ctx, el, img) {
 
 function drawImagePlaceholder(ctx, el) {
   ctx.save();
-  ctx.globalAlpha = el.style?.opacity ?? 1;
   ctx.fillStyle = '#d4d4d8';
   ctx.fillRect(el.x, el.y, el.width, el.height);
-  ctx.fillStyle = '#71717a';
-  ctx.font = `${Math.min(14, el.width / 10)}px Inter, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Image', el.x + el.width / 2, el.y + el.height / 2);
   ctx.restore();
 }
 
@@ -358,21 +321,6 @@ function drawVideoPlaceholder(ctx, el) {
   ctx.save();
   ctx.fillStyle = '#1a1a1a';
   ctx.fillRect(el.x, el.y, el.width, el.height);
-  const cx = el.x + el.width / 2, cy = el.y + el.height / 2;
-  const r = Math.min(28, el.width / 5, el.height / 5);
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#1a1a1a';
-  ctx.beginPath();
-  ctx.moveTo(cx + r * 0.3, cy);
-  ctx.lineTo(cx - r * 0.2, cy - r * 0.38);
-  ctx.lineTo(cx - r * 0.2, cy + r * 0.38);
-  ctx.closePath(); ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.font = `${Math.min(11, el.width / 20)}px Inter, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'bottom';
-  ctx.fillText('YouTube Video', cx, el.y + el.height - 8);
   ctx.restore();
 }
 
@@ -390,12 +338,7 @@ async function preloadAndCropImages(slides) {
         if (!cache.has(key)) {
           const p = cropImageToCover(el.content.src, el.width, el.height)
             .then(dataUrl => cache.set(key, dataUrl))
-            .catch(err => {
-              console.warn(`PPTX crop failed [${el.id}]: ${err.message}`);
-              return srcToDataUrl(el.content.src)
-                .then(raw => cache.set(key, raw))
-                .catch(() => cache.set(key, null));
-            });
+            .catch(() => srcToDataUrl(el.content.src).then(raw => cache.set(key, raw)).catch(() => cache.set(key, null)));
           cropTasks.push(p);
         }
       }
@@ -405,10 +348,6 @@ async function preloadAndCropImages(slides) {
   await Promise.all(cropTasks);
   return cache;
 }
-
-// ═══════════════════════════════════════════════════════════════
-// EXPORT MODAL COMPONENT
-// ═══════════════════════════════════════════════════════════════
 
 export default function ExportModal({ slides, title, onClose }) {
   const [exporting, setExporting] = useState(null);
@@ -420,17 +359,16 @@ export default function ExportModal({ slides, title, onClose }) {
   const handleSaveDraft = () => {
     const res = autoSaveDraft({ name: title || 'Exported Deck', slides });
     if (res.success) {
-      setDraftSavedMsg(`Saved to Draft Slot ${res.slotIndex + 1}!`);
+      setDraftSavedMsg(`✓ Saved to Local Draft Slot ${res.slotIndex + 1}!`);
     } else {
-      setDraftSavedMsg('Drafts full (3/3).');
+      setDraftSavedMsg('Draft slots are full (3/3).');
     }
   };
 
-  // PDF Export
   const exportPDF = useCallback(async () => {
     setExporting('pdf');
     setProgress(5);
-    setStatusText('Preparing typography...');
+    setStatusText('Preparing PDF typography...');
     try {
       await waitForFonts();
       const jsPDF = (await import('jspdf')).default;
@@ -438,7 +376,7 @@ export default function ExportModal({ slides, title, onClose }) {
       const canvas = document.createElement('canvas');
 
       for (let i = 0; i < slides.length; i++) {
-        setStatusText(`Rendering slide ${i + 1} of ${slides.length}...`);
+        setStatusText(`Rendering vector slide ${i + 1} of ${slides.length}...`);
         setProgress(Math.round(((i + 1) / slides.length) * 90));
         if (i > 0) pdf.addPage([10, 5.625], 'landscape');
         await renderSlideToCanvas(slides[i], canvas);
@@ -456,11 +394,10 @@ export default function ExportModal({ slides, title, onClose }) {
     setExporting(null);
   }, [slides, title]);
 
-  // PNG Export
   const exportPNG = useCallback(async () => {
     setExporting('png');
     setProgress(5);
-    setStatusText('Preparing slide images...');
+    setStatusText('Rendering slide canvases...');
     try {
       await waitForFonts();
       const JSZip = (await import('jszip')).default;
@@ -468,14 +405,14 @@ export default function ExportModal({ slides, title, onClose }) {
       const canvas = document.createElement('canvas');
 
       for (let i = 0; i < slides.length; i++) {
-        setStatusText(`Rendering slide image ${i + 1} of ${slides.length}...`);
+        setStatusText(`Exporting HD slide image ${i + 1} of ${slides.length}...`);
         setProgress(Math.round(((i + 1) / slides.length) * 85));
         await renderSlideToCanvas(slides[i], canvas);
         const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
         if (blob) zip.file(`slide-${i + 1}.png`, blob);
       }
 
-      setStatusText('Packaging ZIP archive...');
+      setStatusText('Compressing ZIP package...');
       setProgress(95);
       const content = await zip.generateAsync({ type: 'blob' });
       const { saveAs } = await import('file-saver');
@@ -489,7 +426,6 @@ export default function ExportModal({ slides, title, onClose }) {
     setExporting(null);
   }, [slides, title]);
 
-  // PPTX Export
   const exportPPTX = useCallback(async () => {
     setExporting('pptx');
     setProgress(10);
@@ -505,7 +441,7 @@ export default function ExportModal({ slides, title, onClose }) {
 
       for (let i = 0; i < slides.length; i++) {
         const slide = slides[i];
-        setStatusText(`Converting slide ${i + 1} of ${slides.length}...`);
+        setStatusText(`Generating slide ${i + 1} of ${slides.length}...`);
         setProgress(15 + Math.round(((i + 1) / slides.length) * 75));
 
         const presSlide = pptx.addSlide();
@@ -544,10 +480,6 @@ export default function ExportModal({ slides, title, onClose }) {
               x: ex, y: ey, w: ew, h: eh,
               fill: { color: shapeColor.hex, transparency: Math.min(shapeTransp, 100) },
             };
-            if (el.content.borderWidth && el.content.borderColor) {
-              const bColor = parseColor(el.content.borderColor);
-              opts.line = { color: bColor.hex, width: el.content.borderWidth };
-            }
             if (el.content.shapeType === 'circle') {
               presSlide.addShape(pptx.shapes.OVAL, opts);
             } else {
@@ -566,25 +498,12 @@ export default function ExportModal({ slides, title, onClose }) {
                 x: ex, y: ey, w: ew, h: eh,
                 transparency: transp,
               });
-            } catch (err) {
-              console.error(`PPTX: image add failed [${el.id}]: ${err.message}`);
-            }
-
-          } else if (el.type === 'video' && el.content?.videoId) {
-            presSlide.addShape(pptx.shapes.RECTANGLE, {
-              x: ex, y: ey, w: ew, h: eh,
-              fill: { color: '1A1A1A' },
-            });
-            presSlide.addText('[YouTube Video]', {
-              x: ex, y: ey, w: ew, h: eh,
-              fontSize: 14, color: '999999',
-              align: 'center', valign: 'middle',
-            });
+            } catch (err) {}
           }
         }
       }
 
-      setStatusText('Generating .pptx file...');
+      setStatusText('Packaging .pptx file...');
       setProgress(98);
       const blob = await pptx.write({ outputType: 'blob' });
       const { saveAs } = await import('file-saver');
@@ -600,64 +519,100 @@ export default function ExportModal({ slides, title, onClose }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="export-modal" onClick={e => e.stopPropagation()}>
-        <div className="export-header">
-          <h3>Export Presentation</h3>
-          <button className="close-btn" onClick={onClose}><FiX size={18} /></button>
+      <div className="export-modal-pro" onClick={e => e.stopPropagation()}>
+        {/* Modal Glow Header */}
+        <div className="export-pro-header">
+          <div className="export-pro-title-wrap">
+            <div className="export-pro-icon">
+              <FiDownload size={22} />
+            </div>
+            <div>
+              <h3>Export Studio</h3>
+              <p className="export-pro-deck-info">"{title}" • {slides.length} Slides • 1080p Master</p>
+            </div>
+          </div>
+          <button className="close-btn-pro" onClick={onClose}><FiX size={18} /></button>
         </div>
-        <p className="export-subtitle">"{title}" — {slides.length} slide{slides.length !== 1 ? 's' : ''}</p>
 
         {exporting && (
-          <div className="export-progress-container">
-            <div className="export-progress-status">{statusText}</div>
-            <div className="export-progress-bar">
-              <div className="export-progress-fill" style={{ width: `${progress}%` }} />
+          <div className="export-live-status-card">
+            <div className="status-label-row">
+              <span className="live-status-text">{statusText}</span>
+              <span className="live-status-pct">{progress}%</span>
+            </div>
+            <div className="export-progress-track">
+              <div className="export-progress-bar-glow" style={{ width: `${progress}%` }} />
             </div>
           </div>
         )}
 
-        <div className="export-options">
-          <button className="export-option" onClick={exportPPTX} disabled={!!exporting}>
-            <div className="export-icon pptx"><FiFileText size={26} /></div>
-            <div className="export-info">
-              <h4>PowerPoint (.pptx)</h4>
-              <p>Fully editable file for PowerPoint, Google Slides & Keynote</p>
+        {/* 3 High-End Format Cards */}
+        <div className="export-pro-cards-grid">
+          {/* PPTX */}
+          <div className={`export-card-pro pptx ${exporting === 'pptx' ? 'active-exporting' : ''}`} onClick={exportPPTX}>
+            <div className="export-card-pro-top">
+              <div className="format-badge-pro pptx">POWERPOINT</div>
+              {done === 'pptx' ? (
+                <div className="badge-done"><FiCheck size={14} /> Downloaded</div>
+              ) : exporting === 'pptx' ? (
+                <span className="spinner-pro" />
+              ) : (
+                <span className="arrow-chip">16:9 XML</span>
+              )}
             </div>
-            {done === 'pptx' ? <FiCheck size={18} className="done-icon" /> : exporting === 'pptx' && <span className="spinner" />}
-          </button>
+            <h4>PowerPoint Deck (.pptx)</h4>
+            <p>100% editable vector shapes, native textboxes, and embedded images for PowerPoint & Keynote.</p>
+            <div className="export-card-cta">
+              <FiDownload size={14} /> Click to Download
+            </div>
+          </div>
 
-          <button className="export-option" onClick={exportPDF} disabled={!!exporting}>
-            <div className="export-icon pdf"><FiFile size={26} /></div>
-            <div className="export-info">
-              <h4>PDF Document (.pdf)</h4>
-              <p>High-resolution vector document ready for sharing or printing</p>
+          {/* PDF */}
+          <div className={`export-card-pro pdf ${exporting === 'pdf' ? 'active-exporting' : ''}`} onClick={exportPDF}>
+            <div className="export-card-pro-top">
+              <div className="format-badge-pro pdf">DOCUMENT</div>
+              {done === 'pdf' ? (
+                <div className="badge-done"><FiCheck size={14} /> Downloaded</div>
+              ) : exporting === 'pdf' ? (
+                <span className="spinner-pro" />
+              ) : (
+                <span className="arrow-chip">Print Ready</span>
+              )}
             </div>
-            {done === 'pdf' ? <FiCheck size={18} className="done-icon" /> : exporting === 'pdf' && <span className="spinner" />}
-          </button>
+            <h4>PDF Presentation (.pdf)</h4>
+            <p>Crystal-clear vector PDF master ready for high-resolution distribution, printing, or client pitching.</p>
+            <div className="export-card-cta">
+              <FiDownload size={14} /> Click to Download
+            </div>
+          </div>
 
-          <button className="export-option" onClick={exportPNG} disabled={!!exporting}>
-            <div className="export-icon png"><FiDownload size={26} /></div>
-            <div className="export-info">
-              <h4>PNG Images (.zip)</h4>
-              <p>Individual high-definition slide images packed in a ZIP</p>
+          {/* PNG ZIP */}
+          <div className={`export-card-pro png ${exporting === 'png' ? 'active-exporting' : ''}`} onClick={exportPNG}>
+            <div className="export-card-pro-top">
+              <div className="format-badge-pro png">IMAGES ZIP</div>
+              {done === 'png' ? (
+                <div className="badge-done"><FiCheck size={14} /> Downloaded</div>
+              ) : exporting === 'png' ? (
+                <span className="spinner-pro" />
+              ) : (
+                <span className="arrow-chip">1920×1080</span>
+              )}
             </div>
-            {done === 'png' ? <FiCheck size={18} className="done-icon" /> : exporting === 'png' && <span className="spinner" />}
-          </button>
+            <h4>PNG Images (.zip)</h4>
+            <p>Pack of individual high-resolution 1080p PNG images for social media, carousels, or web embedding.</p>
+            <div className="export-card-cta">
+              <FiDownload size={14} /> Click to Download
+            </div>
+          </div>
         </div>
 
-        {/* Quick Save to Draft Slot */}
-        <div style={{ padding: '0 24px 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <button
-            className="btn-ghost-lg"
-            style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', fontSize: 13 }}
-            onClick={handleSaveDraft}
-          >
+        {/* Draft Quick Save Row */}
+        <div className="export-pro-footer">
+          <button className="export-save-draft-btn" onClick={handleSaveDraft}>
             <FiSave size={15} /> Save this presentation to Local Draft Slot
           </button>
           {draftSavedMsg && (
-            <span style={{ fontSize: 12, color: 'var(--success, #10b981)', textAlign: 'center', fontWeight: 600 }}>
-              ✓ {draftSavedMsg}
-            </span>
+            <span className="export-draft-msg">{draftSavedMsg}</span>
           )}
         </div>
       </div>

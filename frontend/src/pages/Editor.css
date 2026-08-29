@@ -132,13 +132,15 @@
 
 /* ═══ Slide Panel ═══ */
 .slide-panel {
-  width: 220px;
+  width: 236px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   position: relative;
+  height: 100%;
+  overflow: hidden;
 }
 
 .slide-panel-header {
@@ -152,6 +154,7 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
 
 .add-slide-dropdown-wrapper {
@@ -168,6 +171,7 @@
   color: var(--accent-light);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
+  cursor: pointer;
 }
 .add-slide-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
@@ -222,12 +226,30 @@
 }
 
 .slide-list {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
-  padding: 10px 8px;
+  overflow-x: hidden;
+  padding: 12px 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-light) transparent;
+}
+
+.slide-list::-webkit-scrollbar {
+  width: 6px;
+}
+.slide-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.slide-list::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 3px;
+}
+.slide-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
 
 .slide-thumb {
@@ -237,13 +259,14 @@
   overflow: hidden;
   background: var(--bg-tertiary);
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 .slide-thumb:hover { border-color: var(--border-light); }
 .slide-thumb.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 
 .slide-thumb-preview {
   width: 100%;
-  height: 102px;
+  height: 118px;
   position: relative;
   overflow: hidden;
   background: #ffffff;
@@ -253,9 +276,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 8px;
+  padding: 5px 8px;
   background: var(--bg-tertiary);
   border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
 }
 
 .slide-number { font-size: 11px; font-weight: 700; color: var(--text-muted); }

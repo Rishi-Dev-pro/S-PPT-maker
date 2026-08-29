@@ -102,7 +102,6 @@ export function autoSaveDraft({ name, slides }) {
     return saveDraftToSlot(emptyIndex, { name, slides });
   }
 
-  // All 3 slots full -> prompt user to pick which slot to overwrite
   return {
     success: false,
     requiresSlotChoice: true,
@@ -111,7 +110,7 @@ export function autoSaveDraft({ name, slides }) {
 }
 
 /**
- * Delete / clear a draft slot.
+ * Delete / clear a single draft slot.
  */
 export function deleteDraft(slotIndex) {
   if (slotIndex < 0 || slotIndex >= MAX_SLOTS) return false;
@@ -122,6 +121,19 @@ export function deleteDraft(slotIndex) {
     return true;
   } catch (err) {
     console.error('Failed to delete draft:', err);
+    return false;
+  }
+}
+
+/**
+ * Clear all 3 draft slots.
+ */
+export function clearAllDrafts() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    return true;
+  } catch (err) {
+    console.error('Failed to clear drafts:', err);
     return false;
   }
 }

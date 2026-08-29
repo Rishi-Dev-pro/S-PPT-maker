@@ -211,7 +211,7 @@ function SlideThumbnail({ slide, index, isActive, onClick, onDelete, onDuplicate
         <div style={{
           width: 960,
           height: 540,
-          transform: 'scale(0.188)',
+          transform: 'scale(0.22)',
           transformOrigin: 'top left',
           position: 'absolute',
           left: 0,
