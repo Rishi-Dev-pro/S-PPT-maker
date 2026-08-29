@@ -1,0 +1,196 @@
+/* ═══ Rotating Cards Wrapper ═══ */
+.rotating-cards-wrapper {
+  margin-bottom: 28px;
+}
+
+/* ═══ Rotating Cards Container ═══ */
+.rotating-cards-container {
+  width: 100%;
+  height: 480px;
+  perspective: 2000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  user-select: none;
+  touch-action: none;
+  position: relative;
+}
+
+.rotating-cards-track {
+  width: 220px;
+  height: 320px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.05s linear;
+}
+
+.rotating-card {
+  position: absolute;
+  width: 220px;
+  height: 320px;
+  backface-visibility: hidden;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.rotating-card-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-card, #18181b);
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.rotating-card-active .rotating-card-inner {
+  box-shadow: 0 12px 48px rgba(124, 58, 237, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.4);
+  border-color: rgba(124, 58, 237, 0.5);
+  transform: scale(1.05);
+}
+
+/* ═══ Card Preview ═══ */
+.rotating-card-preview {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.rotating-card-stack {
+  position: relative;
+  width: 130px;
+  height: 82px;
+}
+
+.rotating-stack-slide {
+  position: absolute;
+  width: 130px;
+  height: 82px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.rotating-card-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+/* ═══ Card Info ═══ */
+.rotating-card-info {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.rotating-card-info h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary, #f4f4f5);
+}
+
+.rotating-card-cat {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* ═══ Hover Overlay ═══ */
+.rotating-card-hover {
+  position: absolute;
+  inset: 0;
+  background: rgba(124, 58, 237, 0.88);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+.rotating-card-active:hover .rotating-card-hover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rotating-card-hover span {
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ═══ Drag Hint — below carousel ═══ */
+.rotating-cards-hint {
+  text-align: center;
+  padding: 12px 0 0;
+  font-size: 12px;
+  color: var(--text-muted, #71717a);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 768px) {
+  .rotating-cards-container {
+    height: 400px;
+    perspective: 1400px;
+  }
+
+  .rotating-cards-track {
+    width: 170px;
+    height: 260px;
+  }
+
+  .rotating-card {
+    width: 170px;
+    height: 260px;
+  }
+
+  .rotating-card-preview {
+    height: 140px;
+  }
+
+  .rotating-card-stack {
+    width: 100px;
+    height: 64px;
+  }
+
+  .rotating-stack-slide {
+    width: 100px;
+    height: 64px;
+  }
+
+  .rotating-card-info h3 {
+    font-size: 12px;
+  }
+}

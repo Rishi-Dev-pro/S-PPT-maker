@@ -298,11 +298,14 @@ export default function TempleScrollExperience({ onEnterApp }) {
     const fadeInEnd = phase.start + range * 0.25;
     const fadeOutStart = phase.end - range * 0.25;
 
+    // At exact start, show at full opacity (no invisible beginning)
+    if (p === phase.start) return 1;
+
     if (p <= fadeInEnd) {
-      return Math.min(1, (p - phase.start) / (fadeInEnd - phase.start));
+      return Math.min(1, (p - phase.start) / Math.max(0.001, fadeInEnd - phase.start));
     }
     if (p >= fadeOutStart) {
-      return Math.min(1, (phase.end - p) / (phase.end - fadeOutStart));
+      return Math.min(1, (phase.end - p) / Math.max(0.001, phase.end - fadeOutStart));
     }
     return 1;
   };

@@ -51,12 +51,15 @@
 /* ═══ Temple Transition ═══ */
 .temple-transition {
   position: relative;
+  overflow: hidden;
   padding: 100px 48px 80px;
   text-align: center;
   background: linear-gradient(to bottom, #0a0a0a, var(--bg-primary, #09090b));
 }
 
 .temple-transition-inner {
+  position: relative;
+  z-index: 1;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -240,6 +243,50 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 28px;
+}
+
+.templates-grid-animated {
+  animation: gridFadeIn 0.4s ease both;
+}
+
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══ Show Grid Toggle ═══ */
+.show-grid-toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
+
+.show-grid-btn {
+  background: var(--bg-tertiary, #1c1c1e);
+  color: var(--text-muted, #a1a1aa);
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
+}
+
+.show-grid-btn:hover {
+  background: var(--bg-elevated, #27272a);
+  color: var(--text-primary, #f4f4f5);
+  border-color: var(--border-light, rgba(255,255,255,0.15));
+  transform: translateY(-1px);
 }
 
 /* ═══ Template Card ═══ */

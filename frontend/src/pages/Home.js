@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiLayout, FiArrowRight, FiZap, FiDownload, FiImage, FiLayers } from 'react-icons/fi';
 import allTemplates, { getTemplatesByCategory } from '../data/templates';
 import TempleScrollExperience from '../components/TempleScrollExperience';
+import RollingBlinds from '../components/RollingBlinds';
+import RotatingCards from '../components/RotatingCards';
 import './Home.css';
 
 const CATEGORIES = [
@@ -65,6 +67,7 @@ function TemplateCard({ template, onUse }) {
 export default function Home() {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [showGrid, setShowGrid] = useState(false);
 
   const handleUseTemplate = (template) => {
     navigate('/editor', { state: { templateId: template.id } });
@@ -89,6 +92,7 @@ export default function Home() {
 
       {/* Transition into app */}
       <section className="temple-transition">
+        <RollingBlinds />
         <div className="temple-transition-inner">
           <div className="transition-badge">
             <FiZap size={14} /> Free forever — no watermarks
@@ -138,11 +142,24 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="templates-grid">
-          {displayed.map((template, i) => (
-            <TemplateCard key={template.id} template={template} onUse={handleUseTemplate} />
-          ))}
+        <RotatingCards cards={displayed} onCardClick={handleUseTemplate} />
+
+        <div className="show-grid-toggle">
+          <button
+            className="show-grid-btn"
+            onClick={() => setShowGrid(!showGrid)}
+          >
+            {showGrid ? 'Hide Cards' : activeCategory === 'all' ? 'Show All Cards' : `Show All ${CATEGORIES.find(c => c.key === activeCategory)?.label} Cards`}
+          </button>
         </div>
+
+        {showGrid && (
+          <div className="templates-grid templates-grid-animated">
+            {displayed.map((template, i) => (
+              <TemplateCard key={template.id} template={template} onUse={handleUseTemplate} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* How it works */}

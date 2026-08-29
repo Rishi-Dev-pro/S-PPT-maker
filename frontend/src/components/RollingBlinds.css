@@ -1,0 +1,60 @@
+/* ═══ Rolling Blinds Background Effect ═══ */
+.rolling-blinds-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rolling-blind-band {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    rgba(124, 58, 237, 0.03) 0%,
+    rgba(124, 58, 237, 0.06) 50%,
+    rgba(124, 58, 237, 0.03) 100%
+  );
+}
+
+.rolling-blind-band:nth-child(even) {
+  background: linear-gradient(
+    to bottom,
+    rgba(167, 139, 250, 0.02) 0%,
+    rgba(167, 139, 250, 0.05) 50%,
+    rgba(167, 139, 250, 0.02) 100%
+  );
+}
+
+.blind-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(124, 58, 237, 0.15) 20%,
+    rgba(167, 139, 250, 0.2) 50%,
+    rgba(124, 58, 237, 0.15) 80%,
+    transparent 100%
+  );
+}
+
+/* Subtle edge highlight between bands */
+.rolling-blind-band::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(167, 139, 250, 0.12),
+    transparent
+  );
+}
