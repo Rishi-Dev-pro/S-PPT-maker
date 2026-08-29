@@ -4,11 +4,17 @@ import {
   FiPlus, FiTrash2, FiCopy, FiArrowUp, FiArrowDown, FiDownload,
   FiType, FiSquare, FiCircle, FiImage, FiAlignLeft, FiAlignCenter, FiAlignRight,
   FiBold, FiItalic, FiUnderline, FiArrowLeft, FiChevronDown, FiVideo,
-  FiMaximize, FiLayers, FiMove, FiCheck, FiLock, FiUnlock, FiPlay, FiHelpCircle, FiX
+  FiMaximize, FiLayers, FiMove, FiCheck, FiLock, FiUnlock, FiPlay, FiHelpCircle, FiX,
+  FiSave, FiFolder, FiZap, FiRefreshCw, FiUploadCloud
 } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
 import { createSlidesFromTemplate, getTemplateById } from '../data/templates';
+import { getOccupiedDraftCount, autoSaveDraft } from '../utils/draftStorage';
 import ExportModal from '../components/ExportModal';
+import DraftModal from '../components/DraftModal';
+import ImportModal from '../components/ImportModal';
+import AIGeneratorModal from '../components/AIGeneratorModal';
+import FormatConverterModal from '../components/FormatConverterModal';
 import './Editor.css';
 
 const FONTS = [
@@ -94,13 +100,13 @@ function createSlideByLayout(layoutType, currentBgColor = '#ffffff') {
         elements: [
           { id: uuidv4(), type: 'text', x: 50, y: 35, width: 860, height: 50, content: { text: 'Key Performance Indicators', fontSize: 30, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'shape', x: 50, y: 90, width: 60, height: 3, content: { shapeType: 'rect', color: accentColor, borderRadius: 2 }, style: {} },
-          { id: uuidv4(), type: 'shape', x: 50, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
+          { id: uuidv4(), type: 'shape', x: 50, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: themeColorFromBg(currentBgColor), borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 75, y: 165, width: 215, height: 75, content: { text: '99.9%', fontSize: 44, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 75, y: 245, width: 215, height: 120, content: { text: 'Uptime SLA delivered across all distributed cloud regions.', fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.5 }, style: { textAlign: 'left' } },
-          { id: uuidv4(), type: 'shape', x: 345, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
+          { id: uuidv4(), type: 'shape', x: 345, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: themeColorFromBg(currentBgColor), borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 370, y: 165, width: 215, height: 75, content: { text: '4.8x', fontSize: 44, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 370, y: 245, width: 215, height: 120, content: { text: 'Increase in developer deployment throughput per sprint.', fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.5 }, style: { textAlign: 'left' } },
-          { id: uuidv4(), type: 'shape', x: 640, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
+          { id: uuidv4(), type: 'shape', x: 640, y: 130, width: 265, height: 260, content: { shapeType: 'rect', color: themeColorFromBg(currentBgColor), borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 665, y: 165, width: 215, height: 75, content: { text: '<50ms', fontSize: 44, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 665, y: 245, width: 215, height: 120, content: { text: 'Global edge response latency achieved at 95th percentile.', fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.5 }, style: { textAlign: 'left' } },
         ]
@@ -126,15 +132,15 @@ function createSlideByLayout(layoutType, currentBgColor = '#ffffff') {
         elements: [
           { id: uuidv4(), type: 'text', x: 50, y: 35, width: 860, height: 50, content: { text: 'Step-by-Step Implementation', fontSize: 30, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'shape', x: 50, y: 90, width: 60, height: 3, content: { shapeType: 'rect', color: accentColor, borderRadius: 2 }, style: {} },
-          { id: uuidv4(), type: 'shape', x: 50, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
+          { id: uuidv4(), type: 'shape', x: 50, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: themeColorFromBg(currentBgColor), borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 75, y: 165, width: 210, height: 50, content: { text: '01', fontSize: 36, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 75, y: 225, width: 210, height: 40, content: { text: 'Discovery & Plan', fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 75, y: 275, width: 210, height: 160, content: { text: 'Identify constraints, stakeholder requirements, and technical boundaries.', fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.6 }, style: { textAlign: 'left' } },
-          { id: uuidv4(), type: 'shape', x: 350, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
+          { id: uuidv4(), type: 'shape', x: 350, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: themeColorFromBg(currentBgColor), borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 375, y: 165, width: 210, height: 50, content: { text: '02', fontSize: 36, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 375, y: 225, width: 210, height: 40, content: { text: 'Build & Iterate', fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 375, y: 275, width: 210, height: 160, content: { text: 'Rapid prototyping and validation in targeted test environments.', fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.6 }, style: { textAlign: 'left' } },
-          { id: uuidv4(), type: 'shape', x: 650, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: cardBg, borderRadius: 16 }, style: {} },
+          { id: uuidv4(), type: 'shape', x: 650, y: 140, width: 260, height: 330, content: { shapeType: 'rect', color: themeColorFromBg(currentBgColor), borderRadius: 16 }, style: {} },
           { id: uuidv4(), type: 'text', x: 675, y: 165, width: 210, height: 50, content: { text: '03', fontSize: 36, fontWeight: '800', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 675, y: 225, width: 210, height: 40, content: { text: 'Launch & Scale', fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accentColor }, style: { textAlign: 'left' } },
           { id: uuidv4(), type: 'text', x: 675, y: 275, width: 210, height: 160, content: { text: 'Continuous monitoring, telemetry evaluation, and automated rollout.', fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: textMuted, lineHeight: 1.6 }, style: { textAlign: 'left' } },
@@ -144,6 +150,11 @@ function createSlideByLayout(layoutType, currentBgColor = '#ffffff') {
     default:
       return createBlankSlide();
   }
+}
+
+function themeColorFromBg(bg) {
+  const isDark = bg === '#000000' || bg === '#0f172a' || bg === '#18181b' || bg === '#09090b';
+  return isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
 }
 
 function createBlankElement(type) {
@@ -186,7 +197,7 @@ function textToHtml(text) {
     .join('');
 }
 
-// ── Slide Thumbnail (Proportional Miniature Replica) ──
+// ── Slide Thumbnail ──
 function SlideThumbnail({ slide, index, isActive, onClick, onDelete, onDuplicate, onMoveUp, onMoveDown, total }) {
   const getBg = () => {
     if (typeof slide.background === 'string') return { background: slide.background };
@@ -925,7 +936,7 @@ function ColorPickerPopover({ value, onChange, label, onClose }) {
   );
 }
 
-// ── Right-Click PowerPoint-Style Context Menu ──
+// ── Right-Click Context Menu ──
 function ContextMenu({ x, y, element, onAction, onClose }) {
   useEffect(() => {
     const handleOutside = () => onClose();
@@ -990,6 +1001,13 @@ export default function Editor() {
   const [showExport, setShowExport] = useState(false);
   const [showPresent, setShowPresent] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showDraftModal, setShowDraftModal] = useState(false);
+  const [draftModalMode, setDraftModalMode] = useState('manage'); // 'manage' | 'save'
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [showAIModal, setShowAIModal] = useState(false);
+  const [showConverterModal, setShowConverterModal] = useState(false);
+  const [draftCount, setDraftCount] = useState(0);
+
   const [canvasScale, setCanvasScale] = useState(0.7);
   const [zoomLevel, setZoomLevel] = useState('fit');
   const [undoStack, setUndoStack] = useState([]);
@@ -1003,6 +1021,14 @@ export default function Editor() {
   const [savedStatus, setSavedStatus] = useState('Saved');
 
   const snapshotRef = useRef(null);
+
+  const refreshDraftCount = useCallback(() => {
+    setDraftCount(getOccupiedDraftCount());
+  }, []);
+
+  useEffect(() => {
+    refreshDraftCount();
+  }, [refreshDraftCount]);
 
   const addUndo = useCallback(() => {
     setUndoStack(prev => [...prev.slice(-30), JSON.parse(JSON.stringify(slides))]);
@@ -1033,6 +1059,7 @@ export default function Editor() {
     }
   }, [redoStack, slides, currentSlide]);
 
+  // Handle incoming templates, imports, drafts, or AI generations
   useEffect(() => {
     if (location.state?.templateId) {
       const tid = location.state.templateId;
@@ -1040,11 +1067,38 @@ export default function Editor() {
       setSlides(newSlides);
       const template = getTemplateById(tid);
       setPresentationTitle(template?.name ? `${template.name} Presentation` : 'Untitled');
+    } else if (location.state?.importedSlides || location.state?.draftSlides || location.state?.aiSlides) {
+      const incomingSlides = location.state.importedSlides || location.state.draftSlides || location.state.aiSlides;
+      setSlides(incomingSlides);
+      if (location.state.title) setPresentationTitle(location.state.title);
     } else if (location.state?.blank) {
       setSlides([createBlankSlide()]);
       setPresentationTitle('Untitled Presentation');
     }
   }, [location.state]);
+
+  // Save Draft directly or open picker
+  const handleQuickSaveDraft = () => {
+    const res = autoSaveDraft({ name: presentationTitle, slides });
+    if (res.success) {
+      setSavedStatus(`Saved to Slot ${res.slotIndex + 1}!`);
+      refreshDraftCount();
+      setTimeout(() => setSavedStatus('Saved'), 1500);
+    } else if (res.requiresSlotChoice) {
+      setDraftModalMode('save');
+      setShowDraftModal(true);
+    }
+  };
+
+  const handleLoadDraft = (draft) => {
+    if (draft?.slides?.length > 0) {
+      addUndo();
+      setSlides(draft.slides);
+      setPresentationTitle(draft.name || 'Saved Draft');
+      setCurrentSlide(0);
+      setSelectedElement(null);
+    }
+  };
 
   // Keyboard Shortcuts
   useEffect(() => {
@@ -1067,7 +1121,7 @@ export default function Editor() {
         e.preventDefault(); redo(); return;
       }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-        e.preventDefault(); setShowExport(true); return;
+        e.preventDefault(); handleQuickSaveDraft(); return;
       }
 
       if (isInputActive) return;
@@ -1236,6 +1290,8 @@ export default function Editor() {
   const addElement = (type) => {
     if (type === 'image') { fileInputRef.current?.click(); setShowAddMenu(false); return; }
     if (type === 'video') { setShowVideoModal(true); setShowAddMenu(false); return; }
+    if (type === 'import') { setShowImportModal(true); setShowAddMenu(false); return; }
+    if (type === 'ai') { setShowAIModal(true); setShowAddMenu(false); return; }
     addUndo();
     const el = createBlankElement(type);
     if (!el) return;
@@ -1547,9 +1603,43 @@ export default function Editor() {
             placeholder="Untitled Presentation"
           />
           <span className="saved-badge">{savedStatus}</span>
+
+          {/* Save Draft & Drafts Manager Button */}
+          <button
+            className="topbar-btn draft-btn"
+            onClick={handleQuickSaveDraft}
+            title="Save to local storage draft (Ctrl+S)"
+          >
+            <FiSave size={14} /> <span>Save Draft</span>
+          </button>
+          <button
+            className="topbar-btn"
+            onClick={() => { setDraftModalMode('manage'); setShowDraftModal(true); }}
+            title="Open local draft manager"
+          >
+            <FiFolder size={14} /> <span>Drafts ({draftCount}/3)</span>
+          </button>
         </div>
 
         <div className="topbar-right">
+          <button
+            className="topbar-btn ai-btn"
+            onClick={() => setShowAIModal(true)}
+            title="AI Presentation Creator"
+          >
+            <FiZap size={14} /> <span>AI Creator</span>
+          </button>
+
+          <button
+            className="topbar-btn"
+            onClick={() => setShowConverterModal(true)}
+            title="Convert PPTX, PDF, PNG"
+          >
+            <FiRefreshCw size={14} /> <span>Converter</span>
+          </button>
+
+          <div className="topbar-divider" />
+
           <button className="topbar-btn" onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)">
             <FiHelpCircle size={15} />
           </button>
@@ -1566,7 +1656,7 @@ export default function Editor() {
             <span>Redo</span>
           </button>
           <div className="topbar-divider" />
-          <button className="topbar-btn export-btn" onClick={() => setShowExport(true)} title="Export Presentation (Ctrl+S)">
+          <button className="topbar-btn export-btn" onClick={() => setShowExport(true)} title="Export Presentation">
             <FiDownload size={15} /> Export
           </button>
         </div>
@@ -1635,6 +1725,9 @@ export default function Editor() {
                     <button onClick={() => addElement('circle')}><FiCircle size={14} /> Circle</button>
                     <button onClick={() => addElement('image')}><FiImage size={14} /> Upload Image</button>
                     <button onClick={() => addElement('video')}><FiVideo size={14} /> YouTube Video</button>
+                    <div className="ctx-divider" />
+                    <button onClick={() => addElement('import')}><FiUploadCloud size={14} /> Import File (PPTX, PDF, ZIP)</button>
+                    <button onClick={() => addElement('ai')}><FiZap size={14} /> Generate with AI</button>
                   </div>
                 )}
               </div>
@@ -2032,6 +2125,44 @@ export default function Editor() {
 
       {showShortcuts && (
         <ShortcutsModal onClose={() => setShowShortcuts(false)} />
+      )}
+
+      {showDraftModal && (
+        <DraftModal
+          mode={draftModalMode}
+          currentData={{ name: presentationTitle, slides }}
+          onSelectDraft={handleLoadDraft}
+          onSaved={() => refreshDraftCount()}
+          onClose={() => setShowDraftModal(false)}
+        />
+      )}
+
+      {showImportModal && (
+        <ImportModal
+          onImportComplete={({ slides: impSlides, title: impTitle }) => {
+            addUndo();
+            setSlides(impSlides);
+            if (impTitle) setPresentationTitle(impTitle);
+            setCurrentSlide(0);
+          }}
+          onClose={() => setShowImportModal(false)}
+        />
+      )}
+
+      {showAIModal && (
+        <AIGeneratorModal
+          onGenerated={({ slides: aiSlides, title: aiTitle }) => {
+            addUndo();
+            setSlides(aiSlides);
+            if (aiTitle) setPresentationTitle(aiTitle);
+            setCurrentSlide(0);
+          }}
+          onClose={() => setShowAIModal(false)}
+        />
+      )}
+
+      {showConverterModal && (
+        <FormatConverterModal onClose={() => setShowConverterModal(false)} />
       )}
 
       {showExport && <ExportModal slides={slides} title={presentationTitle} onClose={() => setShowExport(false)} />}

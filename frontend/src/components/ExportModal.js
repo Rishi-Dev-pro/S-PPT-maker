@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { FiX, FiFileText, FiFile, FiDownload, FiCheck } from 'react-icons/fi';
+import { FiX, FiFileText, FiFile, FiDownload, FiCheck, FiSave } from 'react-icons/fi';
+import { autoSaveDraft } from '../utils/draftStorage';
 import './ExportModal.css';
 
 // ═══════════════════════════════════════════════════════════════
@@ -136,10 +137,6 @@ function cropImageToCover(src, boxW, boxH) {
   });
 }
 
-// ═══════════════════════════════════════════════════════════════
-// CANVAS DRAWING HELPERS
-// ═══════════════════════════════════════════════════════════════
-
 function roundedRectPath(ctx, x, y, w, h, r) {
   const radius = Math.min(r, w / 2, h / 2);
   if (radius <= 0) { ctx.rect(x, y, w, h); return; }
@@ -168,7 +165,6 @@ function drawImageCover(ctx, img, x, y, w, h) {
   ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 
-// Strip HTML tags for clean text wrapping while preserving line structures
 function htmlToPlainText(html) {
   if (!html) return '';
   return html
@@ -249,7 +245,6 @@ async function renderSlideToCanvas(slide, canvas) {
   ctx.fillStyle = bgCSS;
   ctx.fillRect(0, 0, SLIDE_W, SLIDE_H);
 
-  // Render elements in their exact array z-index order
   for (const el of elements) {
     switch (el.type) {
       case 'text': drawText(ctx, el); break;
@@ -381,10 +376,6 @@ function drawVideoPlaceholder(ctx, el) {
   ctx.restore();
 }
 
-// ═══════════════════════════════════════════════════════════════
-// PPTX EXPORT UTILITIES
-// ═══════════════════════════════════════════════════════════════
-
 function pxToInchX(px) { return (px / SLIDE_W) * 10; }
 function pxToInchY(px) { return (px / SLIDE_H) * 5.625; }
 
@@ -420,14 +411,22 @@ async function preloadAndCropImages(slides) {
 // ═══════════════════════════════════════════════════════════════
 
 export default function ExportModal({ slides, title, onClose }) {
-  const [exporting, setExporting] = useState(null); // 'pdf' | 'png' | 'pptx' | null
+  const [exporting, setExporting] = useState(null);
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('');
   const [done, setDone] = useState(null);
+  const [draftSavedMsg, setDraftSavedMsg] = useState('');
 
-  // ────────────────────────────────
-  // PDF EXPORT
-  // ────────────────────────────────
+  const handleSaveDraft = () => {
+    const res = autoSaveDraft({ name: title || 'Exported Deck', slides });
+    if (res.success) {
+      setDraftSavedMsg(`Saved to Draft Slot ${res.slotIndex + 1}!`);
+    } else {
+      setDraftSavedMsg('Drafts full (3/3).');
+    }
+  };
+
+  // PDF Export
   const exportPDF = useCallback(async () => {
     setExporting('pdf');
     setProgress(5);
@@ -457,9 +456,7 @@ export default function ExportModal({ slides, title, onClose }) {
     setExporting(null);
   }, [slides, title]);
 
-  // ────────────────────────────────
-  // PNG EXPORT
-  // ────────────────────────────────
+  // PNG Export
   const exportPNG = useCallback(async () => {
     setExporting('png');
     setProgress(5);
@@ -492,9 +489,7 @@ export default function ExportModal({ slides, title, onClose }) {
     setExporting(null);
   }, [slides, title]);
 
-  // ────────────────────────────────
-  // PPTX EXPORT
-  // ────────────────────────────────
+  // PPTX Export
   const exportPPTX = useCallback(async () => {
     setExporting('pptx');
     setProgress(10);
@@ -648,6 +643,22 @@ export default function ExportModal({ slides, title, onClose }) {
             </div>
             {done === 'png' ? <FiCheck size={18} className="done-icon" /> : exporting === 'png' && <span className="spinner" />}
           </button>
+        </div>
+
+        {/* Quick Save to Draft Slot */}
+        <div style={{ padding: '0 24px 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <button
+            className="btn-ghost-lg"
+            style={{ width: '100%', justifyContent: 'center', padding: '10px 16px', fontSize: 13 }}
+            onClick={handleSaveDraft}
+          >
+            <FiSave size={15} /> Save this presentation to Local Draft Slot
+          </button>
+          {draftSavedMsg && (
+            <span style={{ fontSize: 12, color: 'var(--success, #10b981)', textAlign: 'center', fontWeight: 600 }}>
+              ✓ {draftSavedMsg}
+            </span>
+          )}
         </div>
       </div>
     </div>

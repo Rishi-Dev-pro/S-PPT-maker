@@ -42,13 +42,208 @@
   transition: all var(--transition-normal);
 }
 
-.nav-cta:hover {
-  background: var(--accent-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px var(--accent-glow);
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* ═══ Temple Transition ═══ */
+.nav-tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  transition: all var(--transition-fast);
+}
+
+.nav-tool-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+.nav-tool-btn.ai-highlight {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(6, 182, 212, 0.15));
+  color: #a78bfa;
+  border-color: rgba(124, 58, 237, 0.3);
+  font-weight: 600;
+}
+
+.nav-tool-btn.ai-highlight:hover {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(6, 182, 212, 0.3));
+  color: white;
+}
+
+.btn-ai-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+}
+
+.btn-ai-hero:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.5);
+}
+
+/* ═══ Saved Drafts Shelf ═══ */
+.drafts-shelf-section {
+  padding: 30px 48px 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.drafts-shelf-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shelf-icon {
+  color: var(--accent-light);
+}
+
+.drafts-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.draft-shelf-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.draft-shelf-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.draft-shelf-preview {
+  height: 140px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.draft-shelf-slide-chip {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.draft-shelf-play {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.draft-shelf-card:hover .draft-shelf-play {
+  background: var(--accent);
+  transform: scale(1.1);
+}
+
+.draft-shelf-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.draft-shelf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.draft-shelf-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.draft-shelf-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.resume-btn {
+  margin-top: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent-light);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.draft-shelf-card:hover .resume-btn {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.draft-del-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.draft-del-btn:hover {
+  color: var(--error);
+  background: rgba(239, 68, 68, 0.1);
+}
 .temple-transition {
   position: relative;
   overflow: hidden;

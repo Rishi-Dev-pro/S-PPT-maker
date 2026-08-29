@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiPlus, FiLayout, FiArrowRight, FiZap, FiDownload, FiImage, FiLayers, FiSearch } from 'react-icons/fi';
+import {
+  FiPlus, FiLayout, FiArrowRight, FiZap, FiDownload, FiLayers,
+  FiSearch, FiFolder, FiTrash2, FiClock, FiPlay, FiRefreshCw, FiUploadCloud
+} from 'react-icons/fi';
 import allTemplates, { getTemplatesByCategory } from '../data/templates';
+import { getDrafts, deleteDraft, getOccupiedDraftCount } from '../utils/draftStorage';
 import TempleScrollExperience from '../components/TempleScrollExperience';
 import RollingBlinds from '../components/RollingBlinds';
 import RotatingCards from '../components/RotatingCards';
+import DraftModal from '../components/DraftModal';
+import ImportModal from '../components/ImportModal';
+import AIGeneratorModal from '../components/AIGeneratorModal';
+import FormatConverterModal from '../components/FormatConverterModal';
 import './Home.css';
 
 const CATEGORIES = [
@@ -70,12 +78,45 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showGrid, setShowGrid] = useState(false);
 
+  // Modals state
+  const [showDraftModal, setShowDraftModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [showAIModal, setShowAIModal] = useState(false);
+  const [showConverterModal, setShowConverterModal] = useState(false);
+
+  // Drafts state
+  const [drafts, setDrafts] = useState([]);
+  const [draftCount, setDraftCount] = useState(0);
+
+  const reloadDrafts = () => {
+    const loaded = getDrafts();
+    setDrafts(loaded);
+    setDraftCount(getOccupiedDraftCount());
+  };
+
+  useEffect(() => {
+    reloadDrafts();
+  }, []);
+
   const handleUseTemplate = (template) => {
     navigate('/editor', { state: { templateId: template.id } });
   };
 
   const handleBlank = () => {
     navigate('/editor', { state: { blank: true } });
+  };
+
+  const handleResumeDraft = (draft) => {
+    if (!draft?.slides) return;
+    navigate('/editor', { state: { draftSlides: draft.slides, title: draft.name } });
+  };
+
+  const handleDeleteDraftSlot = (slotIndex, e) => {
+    e.stopPropagation();
+    if (window.confirm(`Delete draft in Slot ${slotIndex + 1}?`)) {
+      deleteDraft(slotIndex);
+      reloadDrafts();
+    }
   };
 
   const scrollToTemplates = () => {
@@ -94,6 +135,8 @@ export default function Home() {
         t.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
+  const occupiedDrafts = drafts.filter(d => !d.isEmpty);
+
   return (
     <div className="home">
       {/* Sticky Global Top Header */}
@@ -108,8 +151,22 @@ export default function Home() {
           </div>
           <span className="logo-text">S-PPT-Maker</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="btn-ghost-lg" style={{ padding: '8px 18px', fontSize: '13px' }} onClick={scrollToTemplates}>
+
+        <div className="nav-actions">
+          <button className="nav-tool-btn ai-highlight" onClick={() => setShowAIModal(true)}>
+            <FiZap size={14} /> <span>✨ AI Creator</span>
+          </button>
+          <button className="nav-tool-btn" onClick={() => setShowImportModal(true)}>
+            <FiUploadCloud size={14} /> <span>Import</span>
+          </button>
+          <button className="nav-tool-btn" onClick={() => setShowConverterModal(true)}>
+            <FiRefreshCw size={14} /> <span>Converter</span>
+          </button>
+          <button className="nav-tool-btn" onClick={() => setShowDraftModal(true)}>
+            <FiFolder size={14} /> <span>Drafts ({draftCount}/3)</span>
+          </button>
+
+          <button className="btn-ghost-lg" style={{ padding: '8px 16px', fontSize: '13px' }} onClick={scrollToTemplates}>
             <FiLayout size={15} /> Templates
           </button>
           <button className="nav-cta" onClick={handleBlank}>
@@ -126,29 +183,89 @@ export default function Home() {
         <RollingBlinds />
         <div className="temple-transition-inner">
           <div className="transition-badge">
-            <FiZap size={14} /> Free forever — no watermarks, no sign-up
+            <FiZap size={14} /> Free forever — zero server login, 100% private local storage
           </div>
           <h1 className="transition-title">
             Begin Your <span className="gradient-text">Presentation</span>
           </h1>
           <p className="transition-desc">
-            Modern slide designer, rich text editing, professional templates, and instantaneous export.
+            Modern slide designer, AI-powered generation, multi-format import (.pptx, .pdf, .zip), and direct file conversion.
           </p>
+
           <div className="transition-actions">
             <button className="btn-primary-lg" onClick={handleBlank}>
               <FiPlus size={18} /> Start from Scratch
             </button>
-            <button onClick={scrollToTemplates} className="btn-ghost-lg">
-              <FiLayout size={18} /> Browse 16 Templates
+            <button className="btn-ai-hero" onClick={() => setShowAIModal(true)}>
+              <FiZap size={18} /> ✨ AI Deck Builder
+            </button>
+            <button onClick={() => setShowImportModal(true)} className="btn-ghost-lg">
+              <FiUploadCloud size={18} /> Import PPTX / PDF
             </button>
           </div>
+
           <div className="transition-features">
-            <div className="feature-pill"><FiImage size={16} /> Rich Media</div>
-            <div className="feature-pill"><FiLayers size={16} /> 16 Templates</div>
+            <div className="feature-pill" onClick={() => setShowDraftModal(true)} style={{ cursor: 'pointer' }}>
+              <FiFolder size={16} /> Saved Drafts ({draftCount}/3)
+            </div>
+            <div className="feature-pill" onClick={() => setShowConverterModal(true)} style={{ cursor: 'pointer' }}>
+              <FiRefreshCw size={16} /> Quick Format Converter
+            </div>
             <div className="feature-pill"><FiDownload size={16} /> Export PPTX / PDF / PNG</div>
           </div>
         </div>
       </section>
+
+      {/* Saved Drafts Shelf (if any drafts exist) */}
+      {occupiedDrafts.length > 0 && (
+        <section className="drafts-shelf-section">
+          <div className="section-header">
+            <div className="drafts-shelf-title">
+              <FiFolder size={22} className="shelf-icon" />
+              <div>
+                <h2>My Saved Drafts ({occupiedDrafts.length}/3)</h2>
+                <p>Saved securely in your browser's local storage</p>
+              </div>
+            </div>
+            <button className="btn-ghost-lg" style={{ padding: '8px 16px', fontSize: 13 }} onClick={() => setShowDraftModal(true)}>
+              Manage Slots
+            </button>
+          </div>
+
+          <div className="drafts-cards-grid">
+            {occupiedDrafts.map(draft => (
+              <div key={draft.slotIndex} className="draft-shelf-card" onClick={() => handleResumeDraft(draft)}>
+                <div className="draft-shelf-preview" style={{ background: draft.dominantBg || '#1e293b' }}>
+                  <div className="draft-shelf-slide-chip">
+                    <FiLayers size={12} /> {draft.slideCount} Slides
+                  </div>
+                  <div className="draft-shelf-play">
+                    <FiPlay size={20} />
+                  </div>
+                </div>
+
+                <div className="draft-shelf-details">
+                  <div className="draft-shelf-header">
+                    <span className="slot-pill">Slot {draft.slotIndex + 1}</span>
+                    <button
+                      className="draft-del-btn"
+                      onClick={(e) => handleDeleteDraftSlot(draft.slotIndex, e)}
+                      title="Delete Draft"
+                    >
+                      <FiTrash2 size={13} />
+                    </button>
+                  </div>
+                  <h4 className="draft-shelf-name">{draft.name}</h4>
+                  <span className="draft-shelf-date">
+                    <FiClock size={11} /> {new Date(draft.updatedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  <button className="resume-btn">Resume Editing</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Templates Section */}
       <section className="templates-section" id="templates">
@@ -225,19 +342,19 @@ export default function Home() {
         <div className="steps">
           <div className="step">
             <div className="step-num">1</div>
-            <h3>Pick a Template</h3>
-            <p>Choose from curated academic, tech, and corporate designs</p>
+            <h3>Pick or Generate</h3>
+            <p>Select a template, generate with AI, or import .pptx, .pdf, or .zip</p>
           </div>
           <div className="step-arrow"><FiArrowRight size={20} /></div>
           <div className="step">
             <div className="step-num">2</div>
-            <h3>Edit & Customize</h3>
-            <p>In-place rich text editing, precision resizing, and shapes</p>
+            <h3>Edit & Auto-Draft</h3>
+            <p>In-place rich text editing, magnetic snapping, and 3-slot draft system</p>
           </div>
           <div className="step-arrow"><FiArrowRight size={20} /></div>
           <div className="step">
             <div className="step-num">3</div>
-            <h3>Export Instantly</h3>
+            <h3>Export or Convert</h3>
             <p>Download as editable PowerPoint (.pptx), PDF, or PNG ZIP</p>
           </div>
         </div>
@@ -257,6 +374,38 @@ export default function Home() {
           <p>Free presentations. No watermarks. No limits. Open source.</p>
         </div>
       </footer>
+
+      {/* Global Action Modals */}
+      {showDraftModal && (
+        <DraftModal
+          mode="manage"
+          onSelectDraft={handleResumeDraft}
+          onSaved={reloadDrafts}
+          onClose={() => { setShowDraftModal(false); reloadDrafts(); }}
+        />
+      )}
+
+      {showImportModal && (
+        <ImportModal
+          onImportComplete={({ slides, title }) => {
+            navigate('/editor', { state: { importedSlides: slides, title } });
+          }}
+          onClose={() => { setShowImportModal(false); reloadDrafts(); }}
+        />
+      )}
+
+      {showAIModal && (
+        <AIGeneratorModal
+          onGenerated={({ slides, title }) => {
+            navigate('/editor', { state: { aiSlides: slides, title } });
+          }}
+          onClose={() => { setShowAIModal(false); reloadDrafts(); }}
+        />
+      )}
+
+      {showConverterModal && (
+        <FormatConverterModal onClose={() => setShowConverterModal(false)} />
+      )}
     </div>
   );
 }
