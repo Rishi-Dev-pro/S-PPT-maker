@@ -6,6 +6,7 @@ export default function RotatingCards({ cards, onCardClick }) {
   const rotationRef = useRef(0);
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const dragStartRef = useRef({ x: 0, rotation: 0 });
   const autoRotateRef = useRef(null);
   const velocityRef = useRef(0);
@@ -15,31 +16,32 @@ export default function RotatingCards({ cards, onCardClick }) {
   const count = cards.length;
   const anglePerCard = 360 / count;
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const translateZ = isMobile ? 480 : 620;
+  const isTablet = typeof window !== 'undefined' && window.innerWidth < 1024;
+  const translateZ = isMobile ? 360 : isTablet ? 480 : 600;
 
-  // Auto-rotate when not dragging
+  // Auto-rotate when not dragging and not hovered
   useEffect(() => {
-    if (isDragging) {
+    if (isDragging || isHovered) {
       if (autoRotateRef.current) cancelAnimationFrame(autoRotateRef.current);
       return;
     }
 
     let rafId;
     const autoRotate = () => {
-      rotationRef.current -= 0.15;
+      rotationRef.current -= 0.12;
       setRotation(rotationRef.current);
       rafId = requestAnimationFrame(autoRotate);
     };
 
     const timeout = setTimeout(() => {
       rafId = requestAnimationFrame(autoRotate);
-    }, 3000);
+    }, 2000);
 
     return () => {
       clearTimeout(timeout);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [isDragging]);
+  }, [isDragging, isHovered]);
 
   // Momentum after drag release
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function RotatingCards({ cards, onCardClick }) {
     let rafId;
     const applyMomentum = () => {
       if (Math.abs(velocityRef.current) < 0.01) return;
-      velocityRef.current *= 0.95;
+      velocityRef.current *= 0.94;
       rotationRef.current += velocityRef.current;
       setRotation(rotationRef.current);
       rafId = requestAnimationFrame(applyMomentum);
@@ -73,14 +75,14 @@ export default function RotatingCards({ cards, onCardClick }) {
   const handlePointerMove = useCallback((e) => {
     if (!isDragging) return;
     const dx = e.clientX - dragStartRef.current.x;
-    const newRotation = dragStartRef.current.rotation + dx * 0.3;
+    const newRotation = dragStartRef.current.rotation + dx * 0.28;
     rotationRef.current = newRotation;
     setRotation(newRotation);
 
     const now = Date.now();
     const dt = now - lastTimeRef.current;
     if (dt > 0) {
-      velocityRef.current = (e.clientX - lastXRef.current) * 0.3 / Math.max(dt / 16, 1);
+      velocityRef.current = (e.clientX - lastXRef.current) * 0.28 / Math.max(dt / 16, 1);
     }
     lastXRef.current = e.clientX;
     lastTimeRef.current = now;
@@ -93,7 +95,11 @@ export default function RotatingCards({ cards, onCardClick }) {
   const activeIndex = Math.round(-rotation / anglePerCard) % count;
 
   return (
-    <div className="rotating-cards-wrapper">
+    <div
+      className="rotating-cards-wrapper"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div
         className="rotating-cards-container"
         ref={containerRef}
@@ -114,7 +120,7 @@ export default function RotatingCards({ cards, onCardClick }) {
                   transform: `rotateY(${angle}deg) translateZ(${translateZ}px)`,
                 }}
                 onClick={() => {
-                  if (Math.abs(velocityRef.current) < 0.5) {
+                  if (Math.abs(velocityRef.current) < 0.6) {
                     onCardClick?.(card);
                   }
                 }}
@@ -166,7 +172,7 @@ export default function RotatingCards({ cards, onCardClick }) {
       </div>
 
       <div className="rotating-cards-hint">
-        <span>← Drag to rotate →</span>
+        <span>← Drag to explore templates • Click any template to edit →</span>
       </div>
     </div>
   );

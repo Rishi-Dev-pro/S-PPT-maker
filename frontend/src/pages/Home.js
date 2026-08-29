@@ -87,6 +87,28 @@ export default function Home() {
 
   return (
     <div className="home">
+      {/* Sticky Global Top Header */}
+      <header className="navbar">
+        <div className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ cursor: 'pointer' }}>
+          <div className="logo-mark">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="8" fill="url(#nav-logo-grad)" />
+              <path d="M8 10h12M8 14h8M8 18h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
+              <defs><linearGradient id="nav-logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stopColor="#7c3aed" /><stop offset="1" stopColor="#a78bfa" /></linearGradient></defs>
+            </svg>
+          </div>
+          <span className="logo-text">S-PPT-Maker</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button className="btn-ghost-lg" style={{ padding: '8px 18px', fontSize: '13px' }} onClick={scrollToTemplates}>
+            <FiLayout size={15} /> Templates
+          </button>
+          <button className="nav-cta" onClick={handleBlank}>
+            <FiPlus size={16} /> Create Presentation
+          </button>
+        </div>
+      </header>
+
       {/* Cinematic Temple Experience */}
       <TempleScrollExperience onEnterApp={scrollToTemplates} />
 
@@ -95,36 +117,35 @@ export default function Home() {
         <RollingBlinds />
         <div className="temple-transition-inner">
           <div className="transition-badge">
-            <FiZap size={14} /> Free forever — no watermarks
+            <FiZap size={14} /> Free forever — no watermarks, no sign-up
           </div>
           <h1 className="transition-title">
             Begin Your <span className="gradient-text">Presentation</span>
           </h1>
           <p className="transition-desc">
-            Professional templates, powerful editor, instant export.
-            No account needed — start creating right away.
+            Modern slide designer, rich text editing, professional templates, and instantaneous export.
           </p>
           <div className="transition-actions">
             <button className="btn-primary-lg" onClick={handleBlank}>
               <FiPlus size={18} /> Start from Scratch
             </button>
-            <a href="#templates" className="btn-ghost-lg">
-              <FiLayout size={18} /> Browse Templates
-            </a>
+            <button onClick={scrollToTemplates} className="btn-ghost-lg">
+              <FiLayout size={18} /> Browse 16 Templates
+            </button>
           </div>
           <div className="transition-features">
-            <div className="feature-pill"><FiImage size={16} /> Add Images</div>
+            <div className="feature-pill"><FiImage size={16} /> Rich Media</div>
             <div className="feature-pill"><FiLayers size={16} /> 16 Templates</div>
-            <div className="feature-pill"><FiDownload size={16} /> Export PPTX/PDF</div>
+            <div className="feature-pill"><FiDownload size={16} /> Export PPTX / PDF / PNG</div>
           </div>
         </div>
       </section>
 
-      {/* Templates */}
+      {/* Templates Section */}
       <section className="templates-section" id="templates">
         <div className="section-header">
           <h2>Choose a Template</h2>
-          <p>Start with a professionally designed template</p>
+          <p>Start with a professionally crafted design or blank canvas</p>
         </div>
 
         <div className="category-tabs">
@@ -149,13 +170,13 @@ export default function Home() {
             className="show-grid-btn"
             onClick={() => setShowGrid(!showGrid)}
           >
-            {showGrid ? 'Hide Cards' : activeCategory === 'all' ? 'Show All Cards' : `Show All ${CATEGORIES.find(c => c.key === activeCategory)?.label} Cards`}
+            {showGrid ? 'Hide Template Grid' : activeCategory === 'all' ? 'View All Templates Grid' : `View All ${CATEGORIES.find(c => c.key === activeCategory)?.label} Templates`}
           </button>
         </div>
 
         {showGrid && (
           <div className="templates-grid templates-grid-animated">
-            {displayed.map((template, i) => (
+            {displayed.map((template) => (
               <TemplateCard key={template.id} template={template} onUse={handleUseTemplate} />
             ))}
           </div>
@@ -168,20 +189,20 @@ export default function Home() {
         <div className="steps">
           <div className="step">
             <div className="step-num">1</div>
-            <h3>Choose a Template</h3>
-            <p>Pick from 16 professionally designed templates</p>
+            <h3>Pick a Template</h3>
+            <p>Choose from curated academic, tech, and corporate designs</p>
           </div>
           <div className="step-arrow"><FiArrowRight size={20} /></div>
           <div className="step">
             <div className="step-num">2</div>
             <h3>Edit & Customize</h3>
-            <p>Add text, images, shapes — make it yours</p>
+            <p>In-place rich text editing, precision resizing, and shapes</p>
           </div>
           <div className="step-arrow"><FiArrowRight size={20} /></div>
           <div className="step">
             <div className="step-num">3</div>
-            <h3>Download & Share</h3>
-            <p>Export as PPTX, PDF, or PNG — no watermarks</p>
+            <h3>Export Instantly</h3>
+            <p>Download as editable PowerPoint (.pptx), PDF, or PNG ZIP</p>
           </div>
         </div>
       </section>

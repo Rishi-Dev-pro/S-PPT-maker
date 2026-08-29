@@ -105,10 +105,6 @@ function srcToDataUrl(src) {
   });
 }
 
-// ═══════════════════════════════════════════════════════════════
-// PPTX IMAGE PRE-CROP
-// ═══════════════════════════════════════════════════════════════
-
 function cropImageToCover(src, boxW, boxH) {
   return loadImage(src, 15000).then((img) => {
     const imgW = img.naturalWidth;
@@ -141,7 +137,7 @@ function cropImageToCover(src, boxW, boxH) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// CANVAS DRAWING HELPERS (for PDF/PNG)
+// CANVAS DRAWING HELPERS
 // ═══════════════════════════════════════════════════════════════
 
 function roundedRectPath(ctx, x, y, w, h, r) {
@@ -172,12 +168,33 @@ function drawImageCover(ctx, img, x, y, w, h) {
   ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+// Strip HTML tags for clean text wrapping while preserving line structures
+function htmlToPlainText(html) {
+  if (!html) return '';
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<div[^>]*>/gi, '')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<p[^>]*>/gi, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function wrapText(ctx, rawContent, x, y, maxWidth, lineHeight) {
+  const plain = htmlToPlainText(rawContent);
   const lines = [];
-  const paragraphs = (text || '').split('\n');
+  const paragraphs = plain.split('\n');
   let currentY = y;
+
   for (const paragraph of paragraphs) {
-    if (paragraph === '') { currentY += lineHeight; continue; }
+    if (paragraph.trim() === '') {
+      currentY += lineHeight * 0.8;
+      continue;
+    }
     const words = paragraph.split(/(\s+)/);
     let currentLine = '';
     for (let i = 0; i < words.length; i++) {
@@ -185,11 +202,16 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
       const testLine = currentLine + word;
       if (ctx.measureText(testLine).width > maxWidth && currentLine.trim() !== '') {
         lines.push({ text: currentLine.trim(), y: currentY });
-        currentLine = word;
+        currentLine = word.trimStart();
         currentY += lineHeight;
-      } else { currentLine = testLine; }
+      } else {
+        currentLine = testLine;
+      }
     }
-    if (currentLine.trim()) { lines.push({ text: currentLine.trim(), y: currentY }); currentY += lineHeight; }
+    if (currentLine.trim()) {
+      lines.push({ text: currentLine.trim(), y: currentY });
+      currentY += lineHeight;
+    }
   }
   return lines;
 }
@@ -227,6 +249,7 @@ async function renderSlideToCanvas(slide, canvas) {
   ctx.fillStyle = bgCSS;
   ctx.fillRect(0, 0, SLIDE_W, SLIDE_H);
 
+  // Render elements in their exact array z-index order
   for (const el of elements) {
     switch (el.type) {
       case 'text': drawText(ctx, el); break;
@@ -246,7 +269,7 @@ async function renderSlideToCanvas(slide, canvas) {
 function drawText(ctx, el) {
   ctx.save();
   ctx.globalAlpha = el.style?.opacity ?? 1;
-  const size = el.content.fontSize || 24;
+  const size = el.content.fontSize || 20;
   const weight = (el.content.fontWeight === 'bold' || el.content.fontWeight >= 700) ? 'bold' : 'normal';
   const fontStyle = el.content.fontStyle === 'italic' ? 'italic' : 'normal';
   const family = el.content.fontFamily || 'Inter';
@@ -259,17 +282,19 @@ function drawText(ctx, el) {
   const contentWidth = el.width - padX * 2;
   const drawX = el.x + padX;
   const drawY = el.y + padY;
-  const lineHeight = size * (el.content.lineHeight || 1.5);
+  const lineHeight = size * (el.content.lineHeight || 1.4);
+
   ctx.save();
   ctx.beginPath();
   ctx.rect(el.x, el.y, el.width, el.height);
   ctx.clip();
+
   const wrappedLines = wrapText(ctx, el.content.text || '', drawX, drawY, contentWidth, lineHeight);
   for (const line of wrappedLines) {
     let lineX = drawX;
     if (textAlign === 'center') lineX = el.x + el.width / 2;
     else if (textAlign === 'right') lineX = el.x + el.width - padX;
-    ctx.fillText(line.text, lineX, line.y, contentWidth);
+    ctx.fillText(line.text, lineX, line.y);
   }
   ctx.restore();
   ctx.restore();
@@ -279,14 +304,35 @@ function drawShape(ctx, el) {
   ctx.save();
   ctx.globalAlpha = el.style?.opacity ?? 1;
   ctx.fillStyle = el.content.color || '#7c3aed';
+
   if (el.content.shapeType === 'circle') {
     ctx.beginPath();
     ctx.ellipse(el.x + el.width / 2, el.y + el.height / 2, el.width / 2, el.height / 2, 0, 0, Math.PI * 2);
     ctx.fill();
+    if (el.content.borderWidth && el.content.borderColor) {
+      ctx.lineWidth = el.content.borderWidth;
+      ctx.strokeStyle = el.content.borderColor;
+      ctx.stroke();
+    }
   } else {
     const r = el.content.borderRadius || 0;
-    if (r > 0) { ctx.beginPath(); roundedRectPath(ctx, el.x, el.y, el.width, el.height, r); ctx.fill(); }
-    else ctx.fillRect(el.x, el.y, el.width, el.height);
+    if (r > 0) {
+      ctx.beginPath();
+      roundedRectPath(ctx, el.x, el.y, el.width, el.height, r);
+      ctx.fill();
+      if (el.content.borderWidth && el.content.borderColor) {
+        ctx.lineWidth = el.content.borderWidth;
+        ctx.strokeStyle = el.content.borderColor;
+        ctx.stroke();
+      }
+    } else {
+      ctx.fillRect(el.x, el.y, el.width, el.height);
+      if (el.content.borderWidth && el.content.borderColor) {
+        ctx.lineWidth = el.content.borderWidth;
+        ctx.strokeStyle = el.content.borderColor;
+        ctx.strokeRect(el.x, el.y, el.width, el.height);
+      }
+    }
   }
   ctx.restore();
 }
@@ -374,7 +420,9 @@ async function preloadAndCropImages(slides) {
 // ═══════════════════════════════════════════════════════════════
 
 export default function ExportModal({ slides, title, onClose }) {
-  const [exporting, setExporting] = useState(null);
+  const [exporting, setExporting] = useState(null); // 'pdf' | 'png' | 'pptx' | null
+  const [progress, setProgress] = useState(0);
+  const [statusText, setStatusText] = useState('');
   const [done, setDone] = useState(null);
 
   // ────────────────────────────────
@@ -382,19 +430,30 @@ export default function ExportModal({ slides, title, onClose }) {
   // ────────────────────────────────
   const exportPDF = useCallback(async () => {
     setExporting('pdf');
+    setProgress(5);
+    setStatusText('Preparing typography...');
     try {
       await waitForFonts();
       const jsPDF = (await import('jspdf')).default;
       const pdf = new jsPDF({ orientation: 'landscape', unit: 'in', format: [10, 5.625] });
       const canvas = document.createElement('canvas');
+
       for (let i = 0; i < slides.length; i++) {
+        setStatusText(`Rendering slide ${i + 1} of ${slides.length}...`);
+        setProgress(Math.round(((i + 1) / slides.length) * 90));
         if (i > 0) pdf.addPage([10, 5.625], 'landscape');
         await renderSlideToCanvas(slides[i], canvas);
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 10, 5.625);
       }
+
+      setStatusText('Saving PDF document...');
+      setProgress(100);
       pdf.save(`${title || 'presentation'}.pdf`);
       setDone('pdf');
-    } catch (err) { console.error('PDF export error:', err); alert('PDF export failed: ' + err.message); }
+    } catch (err) {
+      console.error('PDF export error:', err);
+      alert('PDF export failed: ' + err.message);
+    }
     setExporting(null);
   }, [slides, title]);
 
@@ -403,21 +462,33 @@ export default function ExportModal({ slides, title, onClose }) {
   // ────────────────────────────────
   const exportPNG = useCallback(async () => {
     setExporting('png');
+    setProgress(5);
+    setStatusText('Preparing slide images...');
     try {
       await waitForFonts();
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
       const canvas = document.createElement('canvas');
+
       for (let i = 0; i < slides.length; i++) {
+        setStatusText(`Rendering slide image ${i + 1} of ${slides.length}...`);
+        setProgress(Math.round(((i + 1) / slides.length) * 85));
         await renderSlideToCanvas(slides[i], canvas);
         const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
         if (blob) zip.file(`slide-${i + 1}.png`, blob);
       }
+
+      setStatusText('Packaging ZIP archive...');
+      setProgress(95);
       const content = await zip.generateAsync({ type: 'blob' });
       const { saveAs } = await import('file-saver');
       saveAs(content, `${title || 'presentation'}.zip`);
+      setProgress(100);
       setDone('png');
-    } catch (err) { console.error('PNG export error:', err); alert('PNG export failed: ' + err.message); }
+    } catch (err) {
+      console.error('PNG export error:', err);
+      alert('PNG export failed: ' + err.message);
+    }
     setExporting(null);
   }, [slides, title]);
 
@@ -426,6 +497,8 @@ export default function ExportModal({ slides, title, onClose }) {
   // ────────────────────────────────
   const exportPPTX = useCallback(async () => {
     setExporting('pptx');
+    setProgress(10);
+    setStatusText('Preloading images for PowerPoint...');
     try {
       await waitForFonts();
       const PptxGenJS = (await import('pptxgenjs')).default;
@@ -435,7 +508,11 @@ export default function ExportModal({ slides, title, onClose }) {
 
       const imgCache = await preloadAndCropImages(slides);
 
-      for (const slide of slides) {
+      for (let i = 0; i < slides.length; i++) {
+        const slide = slides[i];
+        setStatusText(`Converting slide ${i + 1} of ${slides.length}...`);
+        setProgress(15 + Math.round(((i + 1) / slides.length) * 75));
+
         const presSlide = pptx.addSlide();
         presSlide.background = { color: resolveBackgroundHex(slide.background) };
 
@@ -447,17 +524,19 @@ export default function ExportModal({ slides, title, onClose }) {
           const transp = el.style?.opacity != null ? Math.round((1 - el.style.opacity) * 100) : 0;
 
           if (el.type === 'text') {
-            presSlide.addText(el.content.text || '', {
+            const rawText = htmlToPlainText(el.content.text || '');
+            presSlide.addText(rawText, {
               x: ex, y: ey, w: ew, h: eh,
-              fontSize: el.content.fontSize || 24,
+              fontSize: el.content.fontSize || 20,
               fontFace: el.content.fontFamily || 'Arial',
               color: parseColor(el.content.color || '#333333').hex,
               bold: el.content.fontWeight === 'bold' || el.content.fontWeight >= 700,
               italic: el.content.fontStyle === 'italic',
+              underline: el.content.textDecoration === 'underline',
               align: el.style?.textAlign || 'left',
               valign: 'top',
               wrap: true,
-              lineSpacingMultiple: el.content.lineHeight || 1.5,
+              lineSpacingMultiple: el.content.lineHeight || 1.4,
               transparency: transp,
               margin: 0,
               fit: 'shrink',
@@ -470,6 +549,10 @@ export default function ExportModal({ slides, title, onClose }) {
               x: ex, y: ey, w: ew, h: eh,
               fill: { color: shapeColor.hex, transparency: Math.min(shapeTransp, 100) },
             };
+            if (el.content.borderWidth && el.content.borderColor) {
+              const bColor = parseColor(el.content.borderColor);
+              opts.line = { color: bColor.hex, width: el.content.borderWidth };
+            }
             if (el.content.shapeType === 'circle') {
               presSlide.addShape(pptx.shapes.OVAL, opts);
             } else {
@@ -480,10 +563,7 @@ export default function ExportModal({ slides, title, onClose }) {
           } else if (el.type === 'image' && el.content?.src) {
             const cropKey = `${el.content.src}|${el.width}|${el.height}`;
             const dataUrl = imgCache.get(cropKey);
-            if (!dataUrl) {
-              console.warn(`PPTX: skipping missing image [${el.id}]: ${el.content.src}`);
-              continue;
-            }
+            if (!dataUrl) continue;
 
             try {
               presSlide.addImage({
@@ -509,11 +589,17 @@ export default function ExportModal({ slides, title, onClose }) {
         }
       }
 
+      setStatusText('Generating .pptx file...');
+      setProgress(98);
       const blob = await pptx.write({ outputType: 'blob' });
       const { saveAs } = await import('file-saver');
       saveAs(blob, `${title || 'presentation'}.pptx`);
+      setProgress(100);
       setDone('pptx');
-    } catch (err) { console.error('PPTX export error:', err); alert('PPTX export failed: ' + err.message); }
+    } catch (err) {
+      console.error('PPTX export error:', err);
+      alert('PPTX export failed: ' + err.message);
+    }
     setExporting(null);
   }, [slides, title]);
 
@@ -525,28 +611,40 @@ export default function ExportModal({ slides, title, onClose }) {
           <button className="close-btn" onClick={onClose}><FiX size={18} /></button>
         </div>
         <p className="export-subtitle">"{title}" — {slides.length} slide{slides.length !== 1 ? 's' : ''}</p>
+
+        {exporting && (
+          <div className="export-progress-container">
+            <div className="export-progress-status">{statusText}</div>
+            <div className="export-progress-bar">
+              <div className="export-progress-fill" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+        )}
+
         <div className="export-options">
           <button className="export-option" onClick={exportPPTX} disabled={!!exporting}>
             <div className="export-icon pptx"><FiFileText size={26} /></div>
             <div className="export-info">
               <h4>PowerPoint (.pptx)</h4>
-              <p>Editable file — works with PowerPoint, Google Slides, Keynote</p>
+              <p>Fully editable file for PowerPoint, Google Slides & Keynote</p>
             </div>
             {done === 'pptx' ? <FiCheck size={18} className="done-icon" /> : exporting === 'pptx' && <span className="spinner" />}
           </button>
+
           <button className="export-option" onClick={exportPDF} disabled={!!exporting}>
             <div className="export-icon pdf"><FiFile size={26} /></div>
             <div className="export-info">
               <h4>PDF Document (.pdf)</h4>
-              <p>Universal format for sharing and printing</p>
+              <p>High-resolution vector document ready for sharing or printing</p>
             </div>
             {done === 'pdf' ? <FiCheck size={18} className="done-icon" /> : exporting === 'pdf' && <span className="spinner" />}
           </button>
+
           <button className="export-option" onClick={exportPNG} disabled={!!exporting}>
             <div className="export-icon png"><FiDownload size={26} /></div>
             <div className="export-info">
               <h4>PNG Images (.zip)</h4>
-              <p>Individual high-quality slide images</p>
+              <p>Individual high-definition slide images packed in a ZIP</p>
             </div>
             {done === 'png' ? <FiCheck size={18} className="done-icon" /> : exporting === 'png' && <span className="spinner" />}
           </button>
