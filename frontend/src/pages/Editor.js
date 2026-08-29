@@ -4,7 +4,7 @@ import {
   FiPlus, FiTrash2, FiCopy, FiArrowUp, FiArrowDown, FiDownload,
   FiType, FiSquare, FiCircle, FiImage, FiAlignLeft, FiAlignCenter, FiAlignRight,
   FiBold, FiItalic, FiUnderline, FiArrowLeft, FiChevronDown, FiVideo,
-  FiMaximize, FiLayers, FiMove, FiCheck, FiLock, FiUnlock
+  FiMaximize, FiLayers, FiMove, FiCheck, FiLock, FiUnlock, FiPlay, FiHelpCircle, FiX
 } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
 import { createSlidesFromTemplate, getTemplateById } from '../data/templates';
@@ -153,7 +153,7 @@ function createBlankElement(type) {
       type: 'text',
       x: 100, y: 180, width: 480, height: 80,
       content: { text: 'Double-click to edit text', fontSize: 24, fontWeight: 'normal', fontFamily: 'Inter', color: '#1e293b', lineHeight: 1.4 },
-      style: { textAlign: 'left' }
+      style: { textAlign: 'left', opacity: 1 }
     };
   }
   if (type === 'rect') {
@@ -295,7 +295,7 @@ function SlideThumbnail({ slide, index, isActive, onClick, onDelete, onDuplicate
   );
 }
 
-// ── In-Place Editable Element with Smart Alignment, Shift Aspect Ratio & Live Metric Badge ──
+// ── In-Place Editable Element ──
 function EditableElement({
   element,
   isSelected,
@@ -396,7 +396,6 @@ function EditableElement({
       let nextX = Math.round(dragRef.current.origX + dx);
       let nextY = Math.round(dragRef.current.origY + dy);
 
-      // Smart Snapping (Center Horizontal at 480, Center Vertical at 270, Margins at 40/50)
       const elementMidX = nextX + element.width / 2;
       const elementMidY = nextY + element.height / 2;
 
@@ -469,7 +468,6 @@ function EditableElement({
         newY = origY + (origH - newH);
       }
 
-      // Proportional aspect ratio locking if shift is held or circle shape
       if (preserveAspect && (h === 'nw' || h === 'ne' || h === 'se' || h === 'sw')) {
         if (newW / aspectRatio > newH) newW = Math.round(newH * aspectRatio);
         else newH = Math.round(newW / aspectRatio);
@@ -670,6 +668,173 @@ function EditableElement({
   return null;
 }
 
+// ── Fullscreen Presenter Mode Component ──
+function PresenterMode({ slides, initialIndex = 0, onClose }) {
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        setCurrentIndex(c => Math.min(slides.length - 1, c + 1));
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        setCurrentIndex(c => Math.max(0, c - 1));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [slides.length, onClose]);
+
+  const curSlide = slides[currentIndex];
+  const getBg = () => {
+    if (typeof curSlide?.background === 'string') return { background: curSlide.background };
+    if (curSlide?.background?.gradient) return { background: curSlide.background.gradient };
+    return { background: curSlide?.background?.color || '#ffffff' };
+  };
+
+  const scale = Math.min(window.innerWidth / 960, window.innerHeight / 540) * 0.95;
+
+  return (
+    <div className="presenter-overlay" onClick={() => setCurrentIndex(c => (c < slides.length - 1 ? c + 1 : c))}>
+      <div
+        className="presenter-canvas"
+        style={{
+          width: 960 * scale,
+          height: 540 * scale,
+          ...getBg()
+        }}
+      >
+        <div style={{ width: 960, height: 540, transform: `scale(${scale})`, transformOrigin: 'top left', position: 'absolute', left: 0, top: 0 }}>
+          {curSlide?.elements?.map(el => {
+            const elStyle = {
+              position: 'absolute',
+              left: el.x,
+              top: el.y,
+              width: el.width,
+              height: el.height,
+              opacity: el.style?.opacity ?? 1,
+            };
+
+            if (el.type === 'image' && el.content?.src) {
+              return (
+                <div key={el.id} style={{ ...elStyle, borderRadius: el.style?.borderRadius || 0, overflow: 'hidden' }}>
+                  <img src={el.content.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} crossOrigin="anonymous" />
+                </div>
+              );
+            }
+
+            if (el.type === 'shape') {
+              const isCircle = el.content.shapeType === 'circle';
+              return (
+                <div key={el.id} style={{
+                  ...elStyle,
+                  background: el.content.color || '#7c3aed',
+                  borderRadius: isCircle ? '50%' : (el.content.borderRadius || 0),
+                  border: el.content.borderWidth ? `${el.content.borderWidth}px solid ${el.content.borderColor || 'transparent'}` : 'none'
+                }} />
+              );
+            }
+
+            if (el.type === 'text') {
+              const textContent = el.content.text || '';
+              const isHtml = textContent.includes('<') && textContent.includes('>');
+              const textStyle = {
+                fontSize: el.content.fontSize || 20,
+                fontWeight: el.content.fontWeight || 'normal',
+                fontStyle: el.content.fontStyle || 'normal',
+                fontFamily: el.content.fontFamily || 'Inter',
+                color: el.content.color || '#333',
+                textAlign: el.style?.textAlign || 'left',
+                lineHeight: el.content.lineHeight || 1.4,
+                width: '100%',
+                height: '100%',
+                padding: '4px 8px',
+                wordBreak: 'break-word',
+                whiteSpace: 'pre-wrap',
+                overflow: 'hidden'
+              };
+
+              return (
+                <div key={el.id} style={elStyle}>
+                  {isHtml ? (
+                    <div style={textStyle} dangerouslySetInnerHTML={{ __html: textContent }} />
+                  ) : (
+                    <div style={textStyle}>{textContent}</div>
+                  )}
+                </div>
+              );
+            }
+
+            if (el.type === 'video') {
+              return (
+                <div key={el.id} style={{ ...elStyle, borderRadius: 12, overflow: 'hidden', background: '#000' }}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${el.content.videoId}?rel=0`}
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title="Video"
+                  />
+                </div>
+              );
+            }
+
+            return null;
+          })}
+        </div>
+      </div>
+
+      <div className="presenter-controls" onClick={e => e.stopPropagation()}>
+        <button onClick={() => setCurrentIndex(c => Math.max(0, c - 1))} disabled={currentIndex === 0}><FiArrowLeft size={16} /></button>
+        <span>{currentIndex + 1} / {slides.length}</span>
+        <button onClick={() => setCurrentIndex(c => Math.min(slides.length - 1, c + 1))} disabled={currentIndex === slides.length - 1}><FiArrowDown size={16} style={{ transform: 'rotate(-90deg)' }} /></button>
+        <button className="presenter-exit" onClick={onClose} title="Exit (Esc)"><FiX size={16} /></button>
+      </div>
+    </div>
+  );
+}
+
+// ── Shortcuts Help Modal ──
+function ShortcutsModal({ onClose }) {
+  const shortcuts = [
+    { key: 'Ctrl + B', action: 'Bold selected text' },
+    { key: 'Ctrl + I', action: 'Italicize selected text' },
+    { key: 'Ctrl + U', action: 'Underline selected text' },
+    { key: 'Ctrl + Z', action: 'Undo last change' },
+    { key: 'Ctrl + Y', action: 'Redo last change' },
+    { key: 'Ctrl + C / V', action: 'Copy & Paste selected element' },
+    { key: 'Ctrl + D', action: 'Duplicate selected element' },
+    { key: 'Delete / Backspace', action: 'Delete selected element' },
+    { key: 'Arrow Keys', action: 'Nudge element by 1px (Shift for 10px)' },
+    { key: 'Ctrl + ] / [', action: 'Bring forward / Send backward' },
+    { key: 'Ctrl + Shift + ] / [', action: 'Bring to front / Send to back' },
+    { key: 'Ctrl + S', action: 'Open Export menu' },
+    { key: 'F5 / Present', action: 'Start Fullscreen Slide Show' },
+    { key: 'Escape', action: 'Deselect / Exit full screen' },
+  ];
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="shortcuts-modal" onClick={e => e.stopPropagation()}>
+        <div className="export-header">
+          <h3>Keyboard Shortcuts</h3>
+          <button className="close-btn" onClick={onClose}><FiX size={18} /></button>
+        </div>
+        <p className="export-subtitle">PowerPoint-grade shortcuts for rapid presentation design</p>
+        <div className="shortcuts-grid">
+          {shortcuts.map((s, i) => (
+            <div key={i} className="shortcut-row">
+              <span className="shortcut-key">{s.key}</span>
+              <span className="shortcut-desc">{s.action}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── YouTube Video Modal ──
 function VideoUrlModal({ onClose, onAdd }) {
   const [url, setUrl] = useState('');
@@ -823,8 +988,10 @@ export default function Editor() {
   const [selectedElement, setSelectedElement] = useState(null);
   const [presentationTitle, setPresentationTitle] = useState('Untitled Presentation');
   const [showExport, setShowExport] = useState(false);
+  const [showPresent, setShowPresent] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
   const [canvasScale, setCanvasScale] = useState(0.7);
-  const [zoomLevel, setZoomLevel] = useState('fit'); // 'fit' | '50' | '75' | '100' | '125' | '150'
+  const [zoomLevel, setZoomLevel] = useState('fit');
   const [undoStack, setUndoStack] = useState([]);
   const [redoStack, setRedoStack] = useState([]);
   const [clipboard, setClipboard] = useState(null);
@@ -832,13 +999,16 @@ export default function Editor() {
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [activeColorPicker, setActiveColorPicker] = useState(null);
-  const [contextMenu, setContextMenu] = useState(null); // { visible: true, x, y, targetId }
+  const [contextMenu, setContextMenu] = useState(null);
+  const [savedStatus, setSavedStatus] = useState('Saved');
 
   const snapshotRef = useRef(null);
 
   const addUndo = useCallback(() => {
     setUndoStack(prev => [...prev.slice(-30), JSON.parse(JSON.stringify(slides))]);
     setRedoStack([]);
+    setSavedStatus('Saving...');
+    setTimeout(() => setSavedStatus('Saved'), 400);
   }, [slides]);
 
   const undo = useCallback(() => {
@@ -876,11 +1046,17 @@ export default function Editor() {
     }
   }, [location.state]);
 
-  // Keyboard Shortcuts (PowerPoint Parity)
+  // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isInputActive = ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) ||
         document.activeElement?.isContentEditable;
+
+      if (e.key === 'F5') {
+        e.preventDefault();
+        setShowPresent(true);
+        return;
+      }
 
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
         if (!e.shiftKey) { e.preventDefault(); undo(); }
@@ -895,6 +1071,11 @@ export default function Editor() {
       }
 
       if (isInputActive) return;
+
+      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        setShowShortcuts(true);
+        return;
+      }
 
       // Copy & Paste Elements
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c' && selectedElement) {
@@ -1170,7 +1351,6 @@ export default function Editor() {
     setSlides(newSlides);
   };
 
-  // Drag & Resize snapshot history tracking
   const onDragStart = () => {
     snapshotRef.current = JSON.parse(JSON.stringify(slides));
   };
@@ -1311,7 +1491,6 @@ export default function Editor() {
     }
   };
 
-  // Context Menu Handler
   const handleContextMenu = (e, elementId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -1367,8 +1546,17 @@ export default function Editor() {
             onChange={e => setPresentationTitle(e.target.value)}
             placeholder="Untitled Presentation"
           />
+          <span className="saved-badge">{savedStatus}</span>
         </div>
+
         <div className="topbar-right">
+          <button className="topbar-btn" onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)">
+            <FiHelpCircle size={15} />
+          </button>
+          <button className="topbar-btn" onClick={() => setShowPresent(true)} title="Start Fullscreen Slide Show (F5)">
+            <FiPlay size={15} /> <span>Present</span>
+          </button>
+          <div className="topbar-divider" />
           <button className="topbar-btn" onClick={undo} disabled={undoStack.length === 0} title="Undo (Ctrl+Z)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 10h10a5 5 0 015 5v2M3 10l5 5M3 10l5-5"/></svg>
             <span>Undo</span>
@@ -1393,7 +1581,7 @@ export default function Editor() {
               <button
                 className="add-slide-btn"
                 onClick={(e) => { e.stopPropagation(); setShowLayoutMenu(!showLayoutMenu); }}
-                title="New Slide"
+                title="New Slide Layouts"
               >
                 <FiPlus size={14} />
               </button>
@@ -1563,6 +1751,17 @@ export default function Editor() {
                       />
                     )}
                   </div>
+
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 6 }}>Opacity:</span>
+                  <input
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={Math.round((selectedEl.style?.opacity ?? 1) * 100)}
+                    onChange={e => updateElement(selectedElement, { style: { opacity: parseInt(e.target.value) / 100 } })}
+                    style={{ width: 50 }}
+                    title="Text Opacity"
+                  />
                 </div>
               </>
             )}
@@ -1619,10 +1818,21 @@ export default function Editor() {
                         max="40"
                         value={selectedEl.content.borderRadius || 0}
                         onChange={e => updateElement(selectedElement, { content: { borderRadius: parseInt(e.target.value) } })}
-                        style={{ width: 60 }}
+                        style={{ width: 50 }}
                       />
                     </div>
                   )}
+
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 4 }}>Opacity:</span>
+                  <input
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={Math.round((selectedEl.style?.opacity ?? 1) * 100)}
+                    onChange={e => updateElement(selectedElement, { style: { opacity: parseInt(e.target.value) / 100 } })}
+                    style={{ width: 50 }}
+                    title="Shape Opacity"
+                  />
                 </div>
               </>
             )}
@@ -1639,7 +1849,16 @@ export default function Editor() {
                     max="40"
                     value={selectedEl.style?.borderRadius || 0}
                     onChange={e => updateElement(selectedElement, { style: { borderRadius: parseInt(e.target.value) } })}
-                    style={{ width: 60 }}
+                    style={{ width: 50 }}
+                  />
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', marginLeft: 4 }}>Opacity:</span>
+                  <input
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={Math.round((selectedEl.style?.opacity ?? 1) * 100)}
+                    onChange={e => updateElement(selectedElement, { style: { opacity: parseInt(e.target.value) / 100 } })}
+                    style={{ width: 50 }}
                   />
                 </div>
               </>
@@ -1801,6 +2020,18 @@ export default function Editor() {
           onAction={handleContextAction}
           onClose={() => setContextMenu(null)}
         />
+      )}
+
+      {showPresent && (
+        <PresenterMode
+          slides={slides}
+          initialIndex={currentSlide}
+          onClose={() => setShowPresent(false)}
+        />
+      )}
+
+      {showShortcuts && (
+        <ShortcutsModal onClose={() => setShowShortcuts(false)} />
       )}
 
       {showExport && <ExportModal slides={slides} title={presentationTitle} onClose={() => setShowExport(false)} />}

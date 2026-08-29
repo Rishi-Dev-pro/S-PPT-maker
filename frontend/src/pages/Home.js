@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiPlus, FiLayout, FiArrowRight, FiZap, FiDownload, FiImage, FiLayers } from 'react-icons/fi';
+import { FiPlus, FiLayout, FiArrowRight, FiZap, FiDownload, FiImage, FiLayers, FiSearch } from 'react-icons/fi';
 import allTemplates, { getTemplatesByCategory } from '../data/templates';
 import TempleScrollExperience from '../components/TempleScrollExperience';
 import RollingBlinds from '../components/RollingBlinds';
@@ -67,6 +67,7 @@ function TemplateCard({ template, onUse }) {
 export default function Home() {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [showGrid, setShowGrid] = useState(false);
 
   const handleUseTemplate = (template) => {
@@ -81,9 +82,17 @@ export default function Home() {
     document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const displayed = activeCategory === 'all'
+  const baseTemplates = activeCategory === 'all'
     ? allTemplates
     : getTemplatesByCategory(activeCategory);
+
+  const displayed = searchQuery.trim() === ''
+    ? baseTemplates
+    : baseTemplates.filter(t =>
+        t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.category.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
   return (
     <div className="home">
@@ -148,38 +157,65 @@ export default function Home() {
           <p>Start with a professionally crafted design or blank canvas</p>
         </div>
 
-        <div className="category-tabs">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.key}
-              className={`cat-tab ${activeCategory === cat.key ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.key)}
-            >
-              {cat.label}
-              <span className="cat-count">
-                {cat.key === 'all' ? allTemplates.length : getTemplatesByCategory(cat.key).length}
-              </span>
-            </button>
-          ))}
-        </div>
+        {/* Search & Category Filter */}
+        <div className="template-filter-bar">
+          <div className="template-search-wrapper">
+            <FiSearch size={16} className="search-icon" />
+            <input
+              className="template-search-input"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search templates by name, keyword, or topic..."
+            />
+            {searchQuery && (
+              <button className="clear-search-btn" onClick={() => setSearchQuery('')}>×</button>
+            )}
+          </div>
 
-        <RotatingCards cards={displayed} onCardClick={handleUseTemplate} />
-
-        <div className="show-grid-toggle">
-          <button
-            className="show-grid-btn"
-            onClick={() => setShowGrid(!showGrid)}
-          >
-            {showGrid ? 'Hide Template Grid' : activeCategory === 'all' ? 'View All Templates Grid' : `View All ${CATEGORIES.find(c => c.key === activeCategory)?.label} Templates`}
-          </button>
-        </div>
-
-        {showGrid && (
-          <div className="templates-grid templates-grid-animated">
-            {displayed.map((template) => (
-              <TemplateCard key={template.id} template={template} onUse={handleUseTemplate} />
+          <div className="category-tabs">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat.key}
+                className={`cat-tab ${activeCategory === cat.key ? 'active' : ''}`}
+                onClick={() => setActiveCategory(cat.key)}
+              >
+                {cat.label}
+                <span className="cat-count">
+                  {cat.key === 'all' ? allTemplates.length : getTemplatesByCategory(cat.key).length}
+                </span>
+              </button>
             ))}
           </div>
+        </div>
+
+        {displayed.length === 0 ? (
+          <div className="empty-search">
+            <p>No templates found matching "{searchQuery}"</p>
+            <button className="btn-ghost-lg" style={{ padding: '8px 20px', fontSize: '13px', marginTop: '12px' }} onClick={() => { setSearchQuery(''); setActiveCategory('all'); }}>
+              Clear Filter
+            </button>
+          </div>
+        ) : (
+          <>
+            <RotatingCards cards={displayed} onCardClick={handleUseTemplate} />
+
+            <div className="show-grid-toggle">
+              <button
+                className="show-grid-btn"
+                onClick={() => setShowGrid(!showGrid)}
+              >
+                {showGrid ? 'Hide Template Grid' : activeCategory === 'all' ? 'View All Templates Grid' : `View All ${CATEGORIES.find(c => c.key === activeCategory)?.label} Templates`}
+              </button>
+            </div>
+
+            {showGrid && (
+              <div className="templates-grid templates-grid-animated">
+                {displayed.map((template) => (
+                  <TemplateCard key={template.id} template={template} onUse={handleUseTemplate} />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </section>
 
