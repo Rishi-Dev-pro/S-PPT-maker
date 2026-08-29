@@ -4,6 +4,7 @@ import './TempleScrollExperience.css';
 const TOTAL_FRAMES = 270;
 const FRAME_BASE_PATH = '/assets/temple-frames/ezgif-frame-';
 const FRAME_PADDING = 3; // 001, 002, etc.
+const FRAME_EXT = '.jpg';
 
 // Text overlay definitions: [startProgress, endProgress] (0-1)
 const TEXT_PHASES = [
@@ -55,7 +56,7 @@ const TEXT_PHASES = [
 
 function getFrameUrl(index) {
   const num = String(index + 1).padStart(FRAME_PADDING, '0');
-  return `${FRAME_BASE_PATH}${num}.png`;
+  return `${FRAME_BASE_PATH}${num}${FRAME_EXT}`;
 }
 
 export default function TempleScrollExperience({ onEnterApp }) {
