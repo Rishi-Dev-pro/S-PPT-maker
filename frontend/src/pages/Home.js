@@ -9,6 +9,7 @@ const CATEGORIES = [
   { key: 'professional', label: 'Professional' },
   { key: 'modern', label: 'Modern' },
   { key: 'student', label: 'Student' },
+  { key: 'cs', label: 'CS' },
 ];
 
 function TemplateCard({ template, onUse }) {
@@ -123,7 +124,7 @@ export default function Home() {
 
         <div className="hero-features">
           <div className="feature-pill"><FiImage size={16} /> Add Images</div>
-          <div className="feature-pill"><FiLayers size={16} /> 12 Templates</div>
+          <div className="feature-pill"><FiLayers size={16} /> 16 Templates</div>
           <div className="feature-pill"><FiDownload size={16} /> Export PPTX/PDF</div>
         </div>
       </section>
@@ -164,7 +165,7 @@ export default function Home() {
           <div className="step">
             <div className="step-num">1</div>
             <h3>Choose a Template</h3>
-            <p>Pick from 12 professionally designed templates</p>
+            <p>Pick from 16 professionally designed templates</p>
           </div>
           <div className="step-arrow"><FiArrowRight size={20} /></div>
           <div className="step">

@@ -28,9 +28,33 @@ const IMAGES = {
   mountains: '/assets/templates/mountains.jpg',
   ocean: '/assets/templates/ocean.jpg',
   architecture: '/assets/templates/architecture.jpg',
+  // CS — Cloud
+  cloud: '/assets/templates/cloud.jpg',
+  servers: '/assets/templates/servers.jpg',
+  serverRoom: '/assets/templates/server_room.jpg',
+  cloudDatacenter: '/assets/templates/cloud-datacenter.jpg',
+  cloudServices: '/assets/templates/cloud-services.jpg',
+  // CS — ML
+  ai: '/assets/templates/ai.jpg',
+  data: '/assets/templates/data.jpg',
+  mlNeural: '/assets/templates/ml-neural.jpg',
+  mlModel: '/assets/templates/ml-model.jpg',
+  // CS — Networking
+  networking: '/assets/templates/networking.jpg',
+  netTopology: '/assets/templates/net-topology.jpg',
+  netProtocol: '/assets/templates/net-protocol.jpg',
+  netInfra: '/assets/templates/net-infra.jpg',
+  // CS — Software Engineering
+  coding: '/assets/templates/coding.jpg',
+  code: '/assets/templates/code.jpg',
+  seDevops: '/assets/templates/se-devops.jpg',
+  seTesting: '/assets/templates/se-testing.jpg',
+  seArchitecture: '/assets/templates/se-architecture.jpg',
 };
 
-// ── Slide layout builders ──
+// ════════════════════════════════════════════
+// SLIDE LAYOUT BUILDERS
+// ════════════════════════════════════════════
 
 // Title slide with full background image + overlay
 const heroSlide = (title, subtitle, imageUrl, overlayColor, accentColor) => ({
@@ -122,6 +146,171 @@ const endSlide = (title, subtitle, imageUrl, overlayColor, accentColor) => ({
   ],
   background: { type: 'solid', color: '#000000' },
   layout: 'end'
+});
+
+// ════════════════════════════════════════════
+// CS-SPECIFIC SLIDE BUILDERS
+// ════════════════════════════════════════════
+
+// CS Title slide: split layout — text left (~55%), image right (~45%)
+const csTitleSlide = (topic, subtitle, imageUrl, bg, accent, text, metaLines) => ({
+  id: makeId(),
+  elements: [
+    // Left panel background
+    { id: makeId(), type: 'shape', x: 0, y: 0, width: 560, height: 540, content: { shapeType: 'rect', color: bg, borderRadius: 0 }, style: { opacity: 1 } },
+    // Right image
+    { id: makeId(), type: 'image', x: 560, y: 0, width: 400, height: 540, content: { src: imageUrl }, style: { borderRadius: 0 } },
+    // Topic title
+    { id: makeId(), type: 'text', x: 50, y: 80, width: 480, height: 70, content: { text: topic, fontSize: 38, fontWeight: '800', fontFamily: 'Poppins', color: accent, lineHeight: 1.1 }, style: { textAlign: 'left' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 50, y: 165, width: 60, height: 4, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.6 } },
+    // Subtitle
+    { id: makeId(), type: 'text', x: 50, y: 185, width: 480, height: 40, content: { text: subtitle, fontSize: 16, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.4 }, style: { textAlign: 'left', opacity: 0.75 } },
+    // Meta info block
+    { id: makeId(), type: 'text', x: 50, y: 260, width: 480, height: 220, content: { text: metaLines.join('\n'), fontSize: 13, fontWeight: '500', fontFamily: 'Inter', color: text, lineHeight: 2.0 }, style: { textAlign: 'left', opacity: 0.6 } },
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-title'
+});
+
+// CS Content slide with left image
+const csContentImageSlide = (title, bullets, imageUrl, bg, accent, text) => ({
+  id: makeId(),
+  elements: [
+    // Image left
+    { id: makeId(), type: 'image', x: 0, y: 0, width: 380, height: 540, content: { src: imageUrl }, style: { borderRadius: 0 } },
+    // Right panel
+    { id: makeId(), type: 'shape', x: 380, y: 0, width: 580, height: 540, content: { shapeType: 'rect', color: bg, borderRadius: 0 }, style: { opacity: 1 } },
+    // Title
+    { id: makeId(), type: 'text', x: 410, y: 40, width: 520, height: 50, content: { text: title, fontSize: 28, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 410, y: 95, width: 50, height: 3, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.5 } },
+    // Bullets
+    { id: makeId(), type: 'text', x: 410, y: 115, width: 520, height: 390, content: { text: bullets.map(b => `${String.fromCharCode(8226)}  ${b}`).join('\n'), fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.85 }, style: { textAlign: 'left' } },
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-content-image'
+});
+
+// CS Process flow slide — vertical process with boxes + arrows
+const csProcessFlowSlide = (title, steps, bg, accent, text) => ({
+  id: makeId(),
+  elements: [
+    // Title
+    { id: makeId(), type: 'text', x: 40, y: 20, width: 880, height: 45, content: { text: title, fontSize: 28, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 40, y: 68, width: 50, height: 3, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.5 } },
+    // Process boxes
+    ...steps.flatMap((step, i) => {
+      const boxW = 180;
+      const gap = 20;
+      const totalW = steps.length * boxW + (steps.length - 1) * gap;
+      const startX = (960 - totalW) / 2;
+      const x = startX + i * (boxW + gap);
+      const y = 100;
+      const boxH = 340;
+      const elems = [
+        // Box
+        { id: makeId(), type: 'shape', x, y, width: boxW, height: boxH, content: { shapeType: 'rect', color: accent, borderRadius: 12 }, style: { opacity: 0.12 } },
+        // Step number
+        { id: makeId(), type: 'text', x, y: y + 20, width: boxW, height: 36, content: { text: `${i + 1}`, fontSize: 28, fontWeight: '800', fontFamily: 'Poppins', color: accent, lineHeight: 1 }, style: { textAlign: 'center' } },
+        // Step label
+        { id: makeId(), type: 'text', x: x + 10, y: y + 65, width: boxW - 20, height: 70, content: { text: step.label, fontSize: 14, fontWeight: '700', fontFamily: 'Poppins', color: accent, lineHeight: 1.2 }, style: { textAlign: 'center' } },
+        // Description
+        { id: makeId(), type: 'text', x: x + 12, y: y + 140, width: boxW - 24, height: 180, content: { text: step.desc, fontSize: 12, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.5 }, style: { textAlign: 'center', opacity: 0.7 } },
+      ];
+      // Arrow between boxes
+      if (i < steps.length - 1) {
+        const arrowX = x + boxW + 2;
+        elems.push({ id: makeId(), type: 'text', x: arrowX, y: y + 140, width: gap - 4, height: 30, content: { text: String.fromCharCode(8594), fontSize: 22, fontWeight: '400', fontFamily: 'Inter', color: accent, lineHeight: 1 }, style: { textAlign: 'center', opacity: 0.5 } });
+      }
+      return elems;
+    }),
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-process'
+});
+
+// CS Cards slide — 6 cards in 2x3 or 3x2 grid
+const csCardsSlide = (title, cards, bg, accent, text) => ({
+  id: makeId(),
+  elements: [
+    // Title
+    { id: makeId(), type: 'text', x: 40, y: 20, width: 880, height: 45, content: { text: title, fontSize: 28, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 40, y: 68, width: 50, height: 3, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.5 } },
+    // Cards
+    ...cards.flatMap((card, i) => {
+      const x = 40 + (i % 3) * 300;
+      const y = 90 + Math.floor(i / 3) * 210;
+      return [
+        { id: makeId(), type: 'shape', x, y, width: 270, height: 190, content: { shapeType: 'rect', color: accent, borderRadius: 12 }, style: { opacity: 0.08 } },
+        { id: makeId(), type: 'text', x: x + 20, y: y + 18, width: 230, height: 36, content: { text: card.title, fontSize: 16, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+        { id: makeId(), type: 'text', x: x + 20, y: y + 60, width: 230, height: 110, content: { text: card.desc, fontSize: 13, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.5 }, style: { textAlign: 'left', opacity: 0.7 } },
+      ];
+    }),
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-cards'
+});
+
+// CS Comparison slide — two columns with section headers
+const csComparisonSlide = (title, leftTitle, leftItems, rightTitle, rightItems, bg, accent, text) => ({
+  id: makeId(),
+  elements: [
+    // Title
+    { id: makeId(), type: 'text', x: 40, y: 20, width: 880, height: 45, content: { text: title, fontSize: 28, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 40, y: 68, width: 50, height: 3, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.5 } },
+    // Left panel
+    { id: makeId(), type: 'shape', x: 40, y: 90, width: 430, height: 420, content: { shapeType: 'rect', color: accent, borderRadius: 14 }, style: { opacity: 0.06 } },
+    { id: makeId(), type: 'text', x: 60, y: 105, width: 390, height: 36, content: { text: leftTitle, fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    { id: makeId(), type: 'text', x: 60, y: 150, width: 390, height: 340, content: { text: leftItems.map(b => `${String.fromCharCode(8226)}  ${b}`).join('\n'), fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.85 }, style: { textAlign: 'left' } },
+    // Right panel
+    { id: makeId(), type: 'shape', x: 490, y: 90, width: 430, height: 420, content: { shapeType: 'rect', color: accent, borderRadius: 14 }, style: { opacity: 0.06 } },
+    { id: makeId(), type: 'text', x: 510, y: 105, width: 390, height: 36, content: { text: rightTitle, fontSize: 18, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    { id: makeId(), type: 'text', x: 510, y: 150, width: 390, height: 340, content: { text: rightItems.map(b => `${String.fromCharCode(8226)}  ${b}`).join('\n'), fontSize: 14, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.85 }, style: { textAlign: 'left' } },
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-comparison'
+});
+
+// CS Conclusion slide — concise bullet points + key takeaway box
+const csConclusionSlide = (title, points, takeaway, bg, accent, text) => ({
+  id: makeId(),
+  elements: [
+    // Title
+    { id: makeId(), type: 'text', x: 40, y: 30, width: 880, height: 50, content: { text: title, fontSize: 30, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 40, y: 84, width: 60, height: 3, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.5 } },
+    // Bullet points
+    { id: makeId(), type: 'text', x: 40, y: 105, width: 880, height: 200, content: { text: points.map(p => `${String.fromCharCode(8226)}  ${p}`).join('\n'), fontSize: 17, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 2.0 }, style: { textAlign: 'left' } },
+    // Takeaway box
+    { id: makeId(), type: 'shape', x: 40, y: 340, width: 880, height: 140, content: { shapeType: 'rect', color: accent, borderRadius: 14 }, style: { opacity: 0.08 } },
+    { id: makeId(), type: 'text', x: 60, y: 355, width: 200, height: 30, content: { text: 'Key Takeaway', fontSize: 14, fontWeight: '700', fontFamily: 'Poppins', color: accent }, style: { textAlign: 'left' } },
+    { id: makeId(), type: 'text', x: 60, y: 390, width: 840, height: 70, content: { text: takeaway, fontSize: 15, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.5 }, style: { textAlign: 'left', opacity: 0.8 } },
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-conclusion'
+});
+
+// CS Thank You slide — clean, simple
+const csThankYouSlide = (bg, accent, text, topic) => ({
+  id: makeId(),
+  elements: [
+    // Thank You text
+    { id: makeId(), type: 'text', x: 100, y: 140, width: 760, height: 80, content: { text: 'Thank You', fontSize: 52, fontWeight: '800', fontFamily: 'Poppins', color: accent, lineHeight: 1.1 }, style: { textAlign: 'center' } },
+    // Accent bar
+    { id: makeId(), type: 'shape', x: 400, y: 240, width: 160, height: 3, content: { shapeType: 'rect', color: accent, borderRadius: 2 }, style: { opacity: 0.4 } },
+    // Questions
+    { id: makeId(), type: 'text', x: 100, y: 260, width: 760, height: 40, content: { text: 'Any Questions?', fontSize: 20, fontWeight: '500', fontFamily: 'Inter', color: text, lineHeight: 1.4 }, style: { textAlign: 'center', opacity: 0.7 } },
+    // Topic tag
+    { id: makeId(), type: 'text', x: 100, y: 320, width: 760, height: 30, content: { text: topic, fontSize: 13, fontWeight: '600', fontFamily: 'Poppins', color: accent, lineHeight: 1.2 }, style: { textAlign: 'center', opacity: 0.5 } },
+    // Placeholder info
+    { id: makeId(), type: 'text', x: 200, y: 380, width: 560, height: 100, content: { text: '[Your Name]\n[Student Code]  •  [Course Name]\n[College Name]', fontSize: 13, fontWeight: '400', fontFamily: 'Inter', color: text, lineHeight: 1.8 }, style: { textAlign: 'center', opacity: 0.45 } },
+  ],
+  background: { type: 'solid', color: bg },
+  layout: 'cs-thankyou'
 });
 
 // ════════════════════════════════════════════
@@ -531,10 +720,444 @@ const studentLiterature = {
   ]
 };
 
+// ════════════════════════════════════════════
+// CS (COMPUTER SCIENCE) TEMPLATES — 10 SLIDES EACH
+// ════════════════════════════════════════════
+
+// Shared color tokens
+const csCloudBg = '#0c1929';
+const csCloudAccent = '#38bdf8';
+const csCloudText = '#cbd5e1';
+
+const csMLBg = '#1e1b4b';
+const csMLAccent = '#a5b4fc';
+const csMLText = '#c7d2fe';
+
+const csNetBg = '#0a1628';
+const csNetAccent = '#22d3ee';
+const csNetText = '#cbd5e1';
+
+const csSEBg = '#18181b';
+const csSEAccent = '#e4e4e7';
+const csSEText = '#a1a1aa';
+
+const csCloud = {
+  id: 'cs-cloud-computing',
+  name: 'Cloud Computing',
+  category: 'cs',
+  description: 'Professional cloud architecture and infrastructure presentation',
+  thumbnail: 'linear-gradient(135deg, #0c1929 0%, #162544 50%, #1e3a5f 100%)',
+  slides: [
+    // Slide 1 — Title
+    csTitleSlide('Cloud Computing', 'Infrastructure, Services & Modern Applications', IMAGES.cloud, csCloudBg, csCloudAccent, csCloudText, [
+      'Presented By:',
+      '[Your Name]',
+      'Student Code: [Student Code]',
+      'Course: [Course Name]',
+      'College: [College Name]',
+    ]),
+    // Slide 2 — What Is Cloud Computing?
+    csContentImageSlide('What is Cloud Computing?', [
+      'Computing resources delivered over the internet',
+      'Servers, storage, databases, software & processing power',
+      'Users access resources without owning physical infrastructure',
+      '',
+      'Why Do We Need It?',
+      'Lower upfront infrastructure requirements',
+      'Access from different locations',
+      'Easier storage and sharing',
+      'Resources can scale with demand',
+    ], IMAGES.cloudServices, csCloudBg, csCloudAccent, csCloudText),
+    // Slide 3 — How Does Cloud Computing Work?
+    csProcessFlowSlide('How Does Cloud Computing Work?', [
+      { label: 'User\nDevice', desc: 'Access cloud services via browser or app' },
+      { label: 'Internet', desc: 'Data transmitted securely over the network' },
+      { label: 'Cloud\nInfrastructure', desc: 'Data centers with servers and storage' },
+      { label: 'Cloud\nService', desc: 'Processing, storage, or application delivered' },
+      { label: 'Response', desc: 'Results sent back to the user device' },
+    ], csCloudBg, csCloudAccent, csCloudText),
+    // Slide 4 — Key Characteristics
+    csCardsSlide('Key Characteristics', [
+      { title: 'On-Demand Access', desc: 'Resources available instantly when needed, without human intervention from the service provider.' },
+      { title: 'Scalability', desc: 'Scale resources up or down automatically based on workload demands and traffic patterns.' },
+      { title: 'Resource Sharing', desc: 'Multiple users share the same physical infrastructure through virtualization technology.' },
+      { title: 'Pay-as-you-use', desc: 'Only pay for the resources you actually consume, reducing waste and overhead costs.' },
+      { title: 'Broad Network Access', desc: 'Access services from any device with an internet connection, anywhere in the world.' },
+      { title: 'High Availability', desc: 'Built-in redundancy and failover mechanisms ensure continuous service delivery.' },
+    ], csCloudBg, csCloudAccent, csCloudText),
+    // Slide 5 — Types of Cloud & Service Models
+    csComparisonSlide('Cloud Types & Service Models', 'Deployment Models', [
+      'Public Cloud — shared infrastructure, pay-per-use',
+      'Private Cloud — dedicated to a single organization',
+      'Hybrid Cloud — combination of public and private',
+      'Multi-Cloud — using multiple cloud providers',
+    ], 'Service Models', [
+      'IaaS — virtual machines, storage, networking',
+      'PaaS — development platforms and tools',
+      'SaaS — ready-to-use applications',
+      'FaaS — serverless function execution',
+    ], csCloudBg, csCloudAccent, csCloudText),
+    // Slide 6 — Providers & Applications
+    csContentImageSlide('Providers & Real-World Applications', [
+      'Major Cloud Providers:',
+      'AWS — Amazon Web Services',
+      'Microsoft Azure',
+      'Google Cloud Platform',
+      '',
+      'Applications:',
+      'Cloud Storage (Google Drive, Dropbox)',
+      'Video Streaming (Netflix, YouTube)',
+      'Online Gaming (Xbox Cloud, GeForce)',
+      'AI & Machine Learning services',
+    ], IMAGES.cloudDatacenter, csCloudBg, csCloudAccent, csCloudText),
+    // Slide 7 — Advantages
+    csCardsSlide('Advantages', [
+      { title: 'Cost Efficiency', desc: 'Eliminates upfront capital expenditure. Pay only for what you use with operational expense models.' },
+      { title: 'Scalability', desc: 'Instantly scale resources to match demand. Handle traffic spikes without provisioning hardware.' },
+      { title: 'Accessibility', desc: 'Access your data and applications from anywhere with an internet connection.' },
+      { title: 'Fast Deployment', desc: 'Deploy applications in minutes, not weeks. Rapid prototyping and iteration.' },
+      { title: 'Backup & Recovery', desc: 'Automated backups and disaster recovery across multiple geographic regions.' },
+      { title: 'Reduced Maintenance', desc: 'Cloud provider manages hardware, networking, and physical security.' },
+    ], csCloudBg, csCloudAccent, csCloudText),
+    // Slide 8 — Challenges
+    csCardsSlide('Challenges & Disadvantages', [
+      { title: 'Security & Privacy', desc: 'Shared responsibility model requires careful configuration and compliance management.' },
+      { title: 'Internet Dependency', desc: 'Requires stable internet connectivity. Downtime affects access to all services.' },
+      { title: 'Unexpected Costs', desc: 'Pay-per-use can lead to unexpectedly high bills without proper monitoring and budgets.' },
+      { title: 'Service Downtime', desc: 'Even major providers experience outages. Plan for redundancy across providers.' },
+      { title: 'Vendor Lock-in', desc: 'Migrating between providers can be complex and costly due to proprietary services.' },
+      { title: 'Limited Control', desc: 'Less direct control over underlying infrastructure and hardware specifications.' },
+    ], csCloudBg, csCloudAccent, csCloudText),
+    // Slide 9 — Conclusion
+    csConclusionSlide('Conclusion', [
+      'Cloud computing delivers computing resources over a network',
+      'Provides flexibility, scalability and accessibility',
+      'Supports applications such as storage, streaming, gaming and AI',
+      'Security, cost and reliability must be managed carefully',
+    ], 'Cloud computing enables organizations and individuals to access scalable computing resources without owning all of the underlying infrastructure.', csCloudBg, csCloudAccent, csCloudText),
+    // Slide 10 — Thank You
+    csThankYouSlide(csCloudBg, csCloudAccent, csCloudText, 'Cloud Computing Presentation'),
+  ]
+};
+
+const csML = {
+  id: 'cs-machine-learning',
+  name: 'Machine Learning',
+  category: 'cs',
+  description: 'AI and machine learning research presentation template',
+  thumbnail: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)',
+  slides: [
+    // Slide 1 — Title
+    csTitleSlide('Machine Learning', 'Learning Patterns from Data', IMAGES.mlNeural, csMLBg, csMLAccent, csMLText, [
+      'Presented By:',
+      '[Your Name]',
+      'Student Code: [Student Code]',
+      'Course: [Course Name]',
+      'College: [College Name]',
+    ]),
+    // Slide 2 — Introduction
+    csContentImageSlide('What is Machine Learning?', [
+      'Machine learning enables systems to learn patterns from data',
+      'Models use data to make predictions or decisions',
+      'A major area of artificial intelligence',
+      '',
+      'Why is it important?',
+      'Automation of repetitive tasks',
+      'Predictive analytics for decision making',
+      'Pattern recognition in large datasets',
+      'Data-driven decision making',
+    ], IMAGES.ai, csMLBg, csMLAccent, csMLText),
+    // Slide 3 — How ML Works
+    csProcessFlowSlide('How Does Machine Learning Work?', [
+      { label: 'Data\nCollection', desc: 'Gather relevant data from various sources' },
+      { label: 'Preprocessing', desc: 'Clean, normalize and prepare the data' },
+      { label: 'Feature\nEngineering', desc: 'Select and transform relevant features' },
+      { label: 'Model\nTraining', desc: 'Algorithm learns patterns from training data' },
+      { label: 'Evaluation', desc: 'Test model performance on unseen data' },
+    ], csMLBg, csMLAccent, csMLText),
+    // Slide 4 — Types of ML
+    csComparisonSlide('Types of Machine Learning', 'Supervised Learning', [
+      'Uses labeled training data',
+      'Classification — spam, fraud, diagnosis',
+      'Regression — pricing, forecasting',
+      'Examples: SVM, Random Forest, Neural Net',
+    ], 'Unsupervised Learning', [
+      'No labeled data required',
+      'Clustering — customer segmentation',
+      'Dimensionality reduction — PCA, t-SNE',
+      'Examples: K-Means, DBSCAN, Autoencoders',
+    ], csMLBg, csMLAccent, csMLText),
+    // Slide 5 — Common Algorithms
+    csCardsSlide('Common ML Algorithms', [
+      { title: 'Linear Regression', desc: 'Predicts continuous values by fitting a linear relationship between input features and output.' },
+      { title: 'Decision Tree', desc: 'Tree-like model of decisions. Easy to interpret and visualize the decision-making process.' },
+      { title: 'K-Nearest Neighbors', desc: 'Classifies data points based on the majority class of their nearest neighbors in feature space.' },
+      { title: 'Support Vector Machine', desc: 'Finds optimal hyperplane to separate classes. Effective in high-dimensional spaces.' },
+      { title: 'Neural Networks', desc: 'Inspired by biological neurons. Layers of interconnected nodes that learn complex patterns.' },
+      { title: 'Random Forest', desc: 'Ensemble of decision trees. Reduces overfitting through bootstrap aggregation.' },
+    ], csMLBg, csMLAccent, csMLText),
+    // Slide 6 — Model Training & Evaluation
+    csComparisonSlide('Model Training & Evaluation', 'Data Split', [
+      'Training Data — model learns from this (70%)',
+      'Validation Data — tune hyperparameters (15%)',
+      'Testing Data — final performance check (15%)',
+      'Cross-validation for robust estimation',
+    ], 'Evaluation Metrics', [
+      'Accuracy — overall correctness of predictions',
+      'Precision — true positives / predicted positives',
+      'Recall — true positives / actual positives',
+      'F1 Score — harmonic mean of precision and recall',
+    ], csMLBg, csMLAccent, csMLText),
+    // Slide 7 — Advantages
+    csCardsSlide('Advantages', [
+      { title: 'Automation', desc: 'Automates complex decision-making processes that would take humans hours or days.' },
+      { title: 'Pattern Recognition', desc: 'Identifies hidden patterns in massive datasets that humans cannot detect manually.' },
+      { title: 'Prediction', desc: 'Forecasts future trends, behaviors, and outcomes based on historical data patterns.' },
+      { title: 'Scalability', desc: 'Handles millions of data points and can scale to meet growing data demands.' },
+      { title: 'Adaptability', desc: 'Models can be retrained and updated as new data becomes available.' },
+      { title: 'Data-Driven', desc: 'Eliminates guesswork by basing decisions on statistical evidence and data patterns.' },
+    ], csMLBg, csMLAccent, csMLText),
+    // Slide 8 — Limitations
+    csCardsSlide('Challenges & Limitations', [
+      { title: 'Data Quality', desc: 'Models are only as good as their training data. Garbage in, garbage out principle applies.' },
+      { title: 'Overfitting', desc: 'Model learns noise instead of patterns. Performs well on training data but poorly on new data.' },
+      { title: 'Bias', desc: 'Biased training data leads to biased predictions. Fairness requires careful data curation.' },
+      { title: 'Computational Cost', desc: 'Training large models requires significant GPU/TPU resources and energy consumption.' },
+      { title: 'Interpretability', desc: 'Complex models like deep neural networks are difficult to explain and interpret.' },
+      { title: 'Privacy', desc: 'Training on personal data raises privacy concerns and regulatory compliance challenges.' },
+    ], csMLBg, csMLAccent, csMLText),
+    // Slide 9 — Applications & Conclusion
+    csContentImageSlide('Applications & Conclusion', [
+      'Real-World Applications:',
+      'Computer Vision — image recognition, autonomous driving',
+      'NLP — chatbots, translation, sentiment analysis',
+      'Recommendation Systems — Netflix, Spotify, Amazon',
+      'Fraud Detection — banking, insurance, e-commerce',
+      '',
+      'Machine learning transforms industries by enabling',
+      'data-driven automation and intelligent decision making.',
+    ], IMAGES.data, csMLBg, csMLAccent, csMLText),
+    // Slide 10 — Thank You
+    csThankYouSlide(csMLBg, csMLAccent, csMLText, 'Machine Learning Presentation'),
+  ]
+};
+
+const csNetworking = {
+  id: 'cs-networking',
+  name: 'Computer Networking',
+  category: 'cs',
+  description: 'Professional networking infrastructure and protocols presentation',
+  thumbnail: 'linear-gradient(135deg, #0a1628 0%, #0c2d48 50%, #0e4d6e 100%)',
+  slides: [
+    // Slide 1 — Title
+    csTitleSlide('Computer Networking', 'Connecting Devices, Systems & Data', IMAGES.netTopology, csNetBg, csNetAccent, csNetText, [
+      'Presented By:',
+      '[Your Name]',
+      'Student Code: [Student Code]',
+      'Course: [Course Name]',
+      'College: [College Name]',
+    ]),
+    // Slide 2 — Introduction
+    csContentImageSlide('Introduction to Computer Networking', [
+      'Definition:',
+      'A computer network connects devices so they can communicate and share resources',
+      '',
+      'Key Purposes:',
+      'Communication — email, messaging, video calls',
+      'Resource Sharing — printers, files, processing power',
+      'Data Transfer — move information between devices',
+      'Internet Access — connect to global information resources',
+    ], IMAGES.netInfra, csNetBg, csNetAccent, csNetText),
+    // Slide 3 — How Networking Works
+    csProcessFlowSlide('How Does Computer Networking Work?', [
+      { label: 'Device', desc: 'Source device initiates communication' },
+      { label: 'Switch', desc: 'Directs data to the correct local network path' },
+      { label: 'Router', desc: 'Routes data between different networks' },
+      { label: 'Internet', desc: 'Global network of interconnected routers' },
+      { label: 'Server', desc: 'Destination server processes the request' },
+    ], csNetBg, csNetAccent, csNetText),
+    // Slide 4 — Types of Networks
+    csCardsSlide('Types of Networks', [
+      { title: 'LAN', desc: 'Local Area Network — connects devices within a limited area like a building or campus.' },
+      { title: 'MAN', desc: 'Metropolitan Area Network — spans a city or large campus with high-speed connections.' },
+      { title: 'WAN', desc: 'Wide Area Network — covers large geographical areas, connecting multiple LANs.' },
+      { title: 'PAN', desc: 'Personal Area Network — short-range network connecting personal devices via Bluetooth.' },
+      { title: 'WLAN', desc: 'Wireless LAN — uses Wi-Fi technology for wireless device connectivity in a local area.' },
+      { title: 'VPN', desc: 'Virtual Private Network — encrypted tunnel over public networks for secure remote access.' },
+    ], csNetBg, csNetAccent, csNetText),
+    // Slide 5 — Network Devices
+    csCardsSlide('Network Devices', [
+      { title: 'Router', desc: 'Routes data packets between different networks. Determines the best path for data transmission.' },
+      { title: 'Switch', desc: 'Connects devices within a LAN. Uses MAC addresses to forward data to the correct port.' },
+      { title: 'Hub', desc: 'Broadcasts data to all connected devices. Less efficient than switches but simpler to use.' },
+      { title: 'Access Point', desc: 'Provides wireless connectivity. Extends network coverage using Wi-Fi technology.' },
+      { title: 'Modem', desc: 'Modulates and demodulates signals. Connects home networks to the internet service provider.' },
+      { title: 'Firewall', desc: 'Monitors and filters network traffic. Protects networks from unauthorized access and threats.' },
+    ], csNetBg, csNetAccent, csNetText),
+    // Slide 6 — OSI Model (all 7 layers)
+    csCardsSlide('OSI Model — 7 Layers', [
+      { title: '7. Application', desc: 'HTTP, FTP, SMTP, DNS. User-facing network services and protocols.' },
+      { title: '6. Presentation', desc: 'Data encryption, compression, format translation for the application layer.' },
+      { title: '5. Session', desc: 'Manages sessions, connections, and dialog control between applications.' },
+      { title: '4. Transport', desc: 'TCP/UDP. Reliable or fast data delivery with error checking and flow control.' },
+      { title: '3. Network', desc: 'IP addressing and routing. Determines the best path across interconnected networks.' },
+      { title: '2. Data Link', desc: 'Frame formatting and MAC addressing. Error-free transfer between adjacent network nodes.' },
+    ], csNetBg, csNetAccent, csNetText),
+    // Slide 7 — Protocols
+    csCardsSlide('Network Protocols', [
+      { title: 'HTTP / HTTPS', desc: 'Hypertext Transfer Protocol. HTTPS adds SSL/TLS encryption for secure web communication.' },
+      { title: 'TCP / UDP', desc: 'TCP provides reliable, ordered delivery. UDP offers faster, connectionless communication.' },
+      { title: 'IP', desc: 'Internet Protocol. Provides unique addressing (IPv4/IPv6) for devices across networks.' },
+      { title: 'DNS', desc: 'Domain Name System. Translates human-readable domain names to IP addresses.' },
+      { title: 'DHCP', desc: 'Dynamic Host Configuration Protocol. Automatically assigns IP addresses to network devices.' },
+      { title: 'FTP', desc: 'File Transfer Protocol. Standard protocol for transferring files between client and server.' },
+    ], csNetBg, csNetAccent, csNetText),
+    // Slide 8 — Advantages & Challenges
+    csComparisonSlide('Advantages & Challenges', 'Advantages', [
+      'Fast and reliable communication',
+      'Resource sharing across devices',
+      'Scalable network infrastructure',
+      'Centralized management and administration',
+      'Cost-effective resource utilization',
+    ], 'Challenges', [
+      'Security threats and vulnerabilities',
+      'Network congestion during peak usage',
+      'Latency affecting real-time applications',
+      'Single point of failure risks',
+      'Maintenance and upgrade complexity',
+    ], csNetBg, csNetAccent, csNetText),
+    // Slide 9 — Applications & Conclusion
+    csContentImageSlide('Applications & Conclusion', [
+      'Real-World Applications:',
+      'Internet — global information access',
+      'Cloud Computing — remote resource delivery',
+      'Video Conferencing — real-time communication',
+      'Online Gaming — low-latency multiplayer',
+      'IoT — connected smart devices and sensors',
+      '',
+      'Networking is the backbone of modern digital',
+      'infrastructure connecting billions of devices.',
+    ], IMAGES.netProtocol, csNetBg, csNetAccent, csNetText),
+    // Slide 10 — Thank You
+    csThankYouSlide(csNetBg, csNetAccent, csNetText, 'Computer Networking Presentation'),
+  ]
+};
+
+const csSoftwareEng = {
+  id: 'cs-software-engineering',
+  name: 'Software Engineering',
+  category: 'cs',
+  description: 'Software development lifecycle and architecture presentation',
+  thumbnail: 'linear-gradient(135deg, #18181b 0%, #27272a 50%, #3f3f46 100%)',
+  slides: [
+    // Slide 1 — Title
+    csTitleSlide('Software Engineering', 'Designing Reliable Software Systems', IMAGES.coding, csSEBg, csSEAccent, csSEText, [
+      'Presented By:',
+      '[Your Name]',
+      'Student Code: [Student Code]',
+      'Course: [Course Name]',
+      'College: [College Name]',
+    ]),
+    // Slide 2 — What is SE?
+    csContentImageSlide('What is Software Engineering?', [
+      'The systematic approach to designing, developing,',
+      'testing and maintaining software systems',
+      '',
+      'Why is it needed?',
+      'Quality — deliver reliable, bug-free software',
+      'Reliability — ensure consistent performance',
+      'Maintainability — easy to update and modify',
+      'Scalability — handle growing user demands',
+      'Team Collaboration — coordinate large development teams',
+    ], IMAGES.seDevops, csSEBg, csSEAccent, csSEText),
+    // Slide 3 — SDLC (all phases)
+    csCardsSlide('Software Development Life Cycle', [
+      { title: 'Requirements', desc: 'Define what the system must do. Gather stakeholder needs and document specifications.' },
+      { title: 'Planning', desc: 'Estimate timeline, resources, and project scope. Create development roadmap.' },
+      { title: 'Design', desc: 'Architecture, UI/UX, database schemas and API contracts.' },
+      { title: 'Development', desc: 'Write clean, maintainable, well-documented code following best practices.' },
+      { title: 'Testing', desc: 'Unit, integration, system and acceptance testing. Ensure quality and reliability.' },
+      { title: 'Deployment', desc: 'CI/CD pipelines, containerization, cloud hosting and ongoing maintenance.' },
+    ], csSEBg, csSEAccent, csSEText),
+    // Slide 4 — Development Models
+    csComparisonSlide('Software Development Models', 'Waterfall', [
+      'Sequential, linear approach',
+      'Each phase completed before next',
+      'Well-documented requirements upfront',
+      'Best for small, well-defined projects',
+    ], 'Agile', [
+      'Iterative, incremental approach',
+      'Sprints with working software each cycle',
+      'Adapts to changing requirements',
+      'Best for dynamic, evolving projects',
+    ], csSEBg, csSEAccent, csSEText),
+    // Slide 5 — Architecture
+    csContentImageSlide('Software Architecture', [
+      'User / Client',
+      '     ↓',
+      'Frontend — React, Vue, Angular',
+      '     ↓',
+      'API / Backend — Node.js, Python, Java',
+      '     ↓',
+      'Database — SQL, NoSQL, MongoDB',
+      '',
+      'Supporting services:',
+      'Authentication, caching, message queues, monitoring',
+    ], IMAGES.seArchitecture, csSEBg, csSEAccent, csSEText),
+    // Slide 6 — Testing
+    csCardsSlide('Software Testing', [
+      { title: 'Unit Testing', desc: 'Test individual functions and components in isolation. Fast, focused, automated.' },
+      { title: 'Integration Testing', desc: 'Test how multiple components work together. Verifies interfaces and data flow.' },
+      { title: 'System Testing', desc: 'Test the complete application end-to-end. Validates against all requirements.' },
+      { title: 'Acceptance Testing', desc: 'Validates the software meets business requirements. Often performed by stakeholders.' },
+      { title: 'Regression Testing', desc: 'Ensures new changes don\'t break existing functionality. Critical for continuous delivery.' },
+      { title: 'Performance Testing', desc: 'Evaluates speed, scalability, and stability under various load conditions.' },
+    ], csSEBg, csSEAccent, csSEText),
+    // Slide 7 — Principles
+    csCardsSlide('SE Principles', [
+      { title: 'Modularity', desc: 'Break software into smaller, independent modules that can be developed and tested separately.' },
+      { title: 'Abstraction', desc: 'Hide complex implementation details behind simple interfaces for easier use and maintenance.' },
+      { title: 'Encapsulation', desc: 'Bundle data and methods together, controlling access through defined interfaces.' },
+      { title: 'Reusability', desc: 'Design components to be reusable across different parts of the system or different projects.' },
+      { title: 'Maintainability', desc: 'Write code that is easy to understand, modify, and extend over time.' },
+      { title: 'Scalability', desc: 'Design systems that can handle increased load by adding resources without rewriting code.' },
+    ], csSEBg, csSEAccent, csSEText),
+    // Slide 8 — Advantages & Challenges
+    csComparisonSlide('Advantages & Challenges', 'Advantages', [
+      'Better software quality and reliability',
+      'Easier long-term maintenance',
+      'Effective team collaboration',
+      'Predictable development process',
+      'Scalable and extensible systems',
+    ], 'Challenges', [
+      'Increasing system complexity',
+      'Tight project deadlines and budgets',
+      'Evolving technology requirements',
+      'Managing technical debt',
+      'Balancing speed vs. quality',
+    ], csSEBg, csSEAccent, csSEText),
+    // Slide 9 — Applications & Conclusion
+    csContentImageSlide('Applications & Conclusion', [
+      'Applications:',
+      'Web Applications — e-commerce, social media',
+      'Mobile Applications — iOS, Android apps',
+      'Cloud Systems — SaaS, PaaS platforms',
+      'Enterprise Software — ERP, CRM, HRM',
+      '',
+      'Software engineering provides the framework',
+      'for building reliable, scalable and maintainable',
+      'software systems that power modern technology.',
+    ], IMAGES.code, csSEBg, csSEAccent, csSEText),
+    // Slide 10 — Thank You
+    csThankYouSlide(csSEBg, csSEAccent, csSEText, 'Software Engineering Presentation'),
+  ]
+};
+
 const allTemplates = [
   professionalDark, professionalClean, professionalGreen, professionalPurple,
   modernNeon, modernSunset, modernGlass, modernMinimal,
   studentScience, studentHistory, studentMath, studentLiterature,
+  csCloud, csML, csNetworking, csSoftwareEng,
 ];
 
 export const getTemplatesByCategory = (category) =>
@@ -567,7 +1190,7 @@ export const createNewSlideForTemplate = (templateId) => {
     return { id: makeId(), elements: [], background: { type: 'solid', color: '#ffffff' }, layout: 'blank' };
   }
   // Return a content-style slide matching the template's color scheme
-  const firstContentSlide = template.slides.find(s => s.layout === 'content');
+  const firstContentSlide = template.slides.find(s => s.layout === 'content' || s.layout === 'cs-content-image');
   if (firstContentSlide) {
     return {
       ...JSON.parse(JSON.stringify(firstContentSlide)),
