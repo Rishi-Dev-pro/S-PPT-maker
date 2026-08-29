@@ -6,3 +6,5 @@ backend/node_modules/
 .env.local
 .env.*.local
 .freebuff/
+
+.vercel

@@ -380,6 +380,7 @@ export default function Editor() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedElement, slides, undo, redo]);
 
   // Canvas scale

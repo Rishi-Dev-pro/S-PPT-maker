@@ -245,22 +245,6 @@ export default function TempleScrollExperience({ onEnterApp }) {
     }
   }, [reducedMotion, isLoaded, drawFrame]);
 
-  // Calculate text opacity based on scroll progress
-  const getPhaseOpacity = (phase) => {
-    const p = scrollProgressRef.current;
-    if (p < phase.start || p > phase.end) return 0;
-    const range = phase.end - phase.start;
-    const fadeInEnd = phase.start + range * 0.3;
-    const fadeOutStart = phase.end - range * 0.3;
-
-    if (p < fadeInEnd) {
-      return (p - phase.start) / (fadeInEnd - phase.start);
-    }
-    if (p > fadeOutStart) {
-      return (phase.end - p) / (phase.end - fadeOutStart);
-    }
-    return 1;
-  };
 
   // Use state to force re-render for text opacity (only on scroll, throttled)
   const [textProgress, setTextProgress] = useState(0);
