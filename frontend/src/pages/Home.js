@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiLayout, FiArrowRight, FiZap, FiDownload, FiImage, FiLayers } from 'react-icons/fi';
 import allTemplates, { getTemplatesByCategory } from '../data/templates';
+import TempleScrollExperience from '../components/TempleScrollExperience';
 import './Home.css';
 
 const CATEGORIES = [
@@ -64,7 +65,6 @@ function TemplateCard({ template, onUse }) {
 export default function Home() {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState('all');
-  const [showModal, setShowModal] = useState(false);
 
   const handleUseTemplate = (template) => {
     navigate('/editor', { state: { templateId: template.id } });
@@ -74,45 +74,33 @@ export default function Home() {
     navigate('/editor', { state: { blank: true } });
   };
 
+  const scrollToTemplates = () => {
+    document.getElementById('templates')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const displayed = activeCategory === 'all'
     ? allTemplates
     : getTemplatesByCategory(activeCategory);
 
   return (
     <div className="home">
-      {/* Nav */}
-      <nav className="navbar">
-        <div className="nav-logo">
-          <div className="logo-mark">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <rect width="28" height="28" rx="8" fill="url(#logo-grad)" />
-              <path d="M8 10h12M8 14h8M8 18h10" stroke="white" strokeWidth="2" strokeLinecap="round" />
-              <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stopColor="#7c3aed" /><stop offset="1" stopColor="#a78bfa" /></linearGradient></defs>
-            </svg>
-          </div>
-          <span className="logo-text">S-PPT-Maker</span>
-        </div>
-        <button className="nav-cta" onClick={handleBlank}>
-          <FiPlus size={16} /> New Presentation
-        </button>
-      </nav>
+      {/* Cinematic Temple Experience */}
+      <TempleScrollExperience onEnterApp={scrollToTemplates} />
 
-      {/* Hero */}
-      <section className="hero">
-        <div className="hero-glow" />
-        <div className="hero-content">
-          <div className="hero-badge">
+      {/* Transition into app */}
+      <section className="temple-transition">
+        <div className="temple-transition-inner">
+          <div className="transition-badge">
             <FiZap size={14} /> Free forever — no watermarks
           </div>
-          <h1>
-            Create <span className="gradient-text">stunning</span> presentations<br />
-            without the price tag
+          <h1 className="transition-title">
+            Begin Your <span className="gradient-text">Presentation</span>
           </h1>
-          <p className="hero-desc">
+          <p className="transition-desc">
             Professional templates, powerful editor, instant export.
             No account needed — start creating right away.
           </p>
-          <div className="hero-actions">
+          <div className="transition-actions">
             <button className="btn-primary-lg" onClick={handleBlank}>
               <FiPlus size={18} /> Start from Scratch
             </button>
@@ -120,12 +108,11 @@ export default function Home() {
               <FiLayout size={18} /> Browse Templates
             </a>
           </div>
-        </div>
-
-        <div className="hero-features">
-          <div className="feature-pill"><FiImage size={16} /> Add Images</div>
-          <div className="feature-pill"><FiLayers size={16} /> 16 Templates</div>
-          <div className="feature-pill"><FiDownload size={16} /> Export PPTX/PDF</div>
+          <div className="transition-features">
+            <div className="feature-pill"><FiImage size={16} /> Add Images</div>
+            <div className="feature-pill"><FiLayers size={16} /> 16 Templates</div>
+            <div className="feature-pill"><FiDownload size={16} /> Export PPTX/PDF</div>
+          </div>
         </div>
       </section>
 
